@@ -32,6 +32,10 @@ public class main extends JavaPlugin implements Listener, CommandExecutor {
         Bukkit.getPluginManager().registerEvents(this, this);
         getCommand("qchat").setExecutor(this);
         getCommand("chat2qq").setExecutor(this);
+        if(getConfig().getBoolean("general.allow-bStats",true)){
+            int pluginId = 12193;
+            new Metrics(this, pluginId);
+        }
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
@@ -129,14 +133,13 @@ public class main extends JavaPlugin implements Listener, CommandExecutor {
             }
         }
         if(command.getName().equalsIgnoreCase("chat2qq")){
-            if(args.length>1 && args[0].equalsIgnoreCase("reload")){
+            if(args.length>=1 && args[0].equalsIgnoreCase("reload")){
                 if(sender.hasPermission("miraimc.command.chat2qq")){
                     reloadConfig();
                     sender.sendMessage(ChatColor.translateAlternateColorCodes('&',"&a配置文件已经重新载入！"));
                 } else sender.sendMessage(ChatColor.translateAlternateColorCodes('&',"&c你没有足够的权限使用此命令！"));
             } else {
-                sender.sendMessage("This server is running "+getDescription().getName()+" version "+getDescription().getVersion()+" by "+ getDescription().getAuthors().toString().replace("[","").replace("]",""));
-                sender.sendMessage("MiraiMC version "+Bukkit.getPluginManager().getPlugin("MiraiMC").getDescription().getVersion()+" by "+ Bukkit.getPluginManager().getPlugin("MiraiMC").getDescription().getAuthors().toString().replace("[","").replace("]",""));
+                sender.sendMessage("This server is running "+getDescription().getName()+" version "+getDescription().getVersion()+" by "+ getDescription().getAuthors().toString().replace("[","").replace("]","")+" (MiraiMC version "+Bukkit.getPluginManager().getPlugin("MiraiMC").getDescription().getVersion()+")");
             }
         }
         return true;
