@@ -1,0 +1,19 @@
+general:
+  allow-bStats: true
+  require-command-to-chat: true
+  command-also-broadcast-to-chat: true
+  available-worlds:
+    - world
+    - spawn
+  available-worlds-use-as-blacklist: false
+  in-game-chat-format: "&6[%groupname%/%groupid%] &a%nick%(%qq%)&r: %message%"
+  allow-console-chat: false
+  console-name: "控制台"
+bot:
+  botaccount: 123456
+  groupid: 123456
+  requite-special-word-prefix:
+    enabled: true
+    prefix:
+      - "#"
+  group-chat-format: "[MC] %player%: %message%"
