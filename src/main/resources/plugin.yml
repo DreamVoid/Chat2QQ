@@ -1,0 +1,6 @@
+name: MyPlugin
+main: com.example.demo.main
+version: 1.0
+author: DreamVoid
+api-version: 1.16
+depend: [MiraiMC]
