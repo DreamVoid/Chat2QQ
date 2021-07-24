@@ -2,17 +2,13 @@ package me.dreamvoid.chat2qq;
 
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.dreamvoid.miraimc.api.MiraiBot;
-import me.dreamvoid.miraimc.bukkit.event.MiraiGroupMessageEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
@@ -29,63 +25,13 @@ public class main extends JavaPlugin implements Listener, CommandExecutor {
     @Override // 启用插件
     public void onEnable() {
         this.mirai = MiraiBot.Instance;
-        Bukkit.getPluginManager().registerEvents(this, this);
+        Bukkit.getPluginManager().registerEvents(new onGroupMessage(this), this);
+        Bukkit.getPluginManager().registerEvents(new onPlayerMessage(this), this);
         getCommand("qchat").setExecutor(this);
         getCommand("chat2qq").setExecutor(this);
         if(getConfig().getBoolean("general.allow-bStats",true)){
             int pluginId = 12193;
             new Metrics(this, pluginId);
-        }
-    }
-
-    @EventHandler(priority = EventPriority.LOWEST)
-    public void onGroupMessageReceive(MiraiGroupMessageEvent e){
-        boolean allowPrefix = false;
-
-        // 判断消息是否带前缀
-        if(getConfig().getBoolean("bot.requite-special-word-prefix.enabled",false)){
-            for(String prefix : getConfig().getStringList("bot.requite-special-word-prefix.prefix")){
-                if(e.getMessage().startsWith(prefix)){
-                    allowPrefix = true;
-                    break;
-                }
-            }
-        } else allowPrefix = true;
-
-        if(e.getBotID() == getConfig().getLong("bot.botaccount") && getConfig().getLong("bot.groupid") == e.getGroupID() &&  allowPrefix){
-            String formatText = getConfig().getString("general.in-game-chat-format")
-                    .replace("%groupname%",e.getGroupName())
-                    .replace("%groupid%",String.valueOf(e.getGroupID()))
-                    .replace("%nick%",e.getSenderNameCard())
-                    .replace("%qq%",String.valueOf(e.getSenderID()))
-                    .replace("%message%",e.getMessage());
-            Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&',formatText));
-        }
-    }
-
-    @EventHandler(priority = EventPriority.LOWEST)
-    public void onPlayerChat(AsyncPlayerChatEvent e){
-        if(!(getConfig().getBoolean("general.require-command-to-chat",false))){
-            boolean allowWorld = false;
-
-            // 判断玩家所处世界
-            for(String world : getConfig().getStringList("general.available-worlds")){
-                if(e.getPlayer().getWorld().getName().equalsIgnoreCase(world)){
-                    allowWorld = true;
-                    break;
-                }
-            }
-            if(getConfig().getBoolean("general.available-worlds-use-as-blacklist")) allowWorld = !allowWorld;
-
-            if(allowWorld){
-                String formatText = getConfig().getString("bot.group-chat-format")
-                        .replace("%player%",e.getPlayer().getName())
-                        .replace("%message%",e.getMessage());
-                if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI")!=null){
-                    formatText = PlaceholderAPI.setPlaceholders(e.getPlayer(),formatText);
-                }
-                mirai.sendGroupMessage(getConfig().getLong("bot.botaccount"),getConfig().getLong("bot.groupid"),formatText);
-            }
         }
     }
 
@@ -130,6 +76,11 @@ public class main extends JavaPlugin implements Listener, CommandExecutor {
                     formatText = PlaceholderAPI.setPlaceholders((Player) sender,formatText);
                 }
                 mirai.sendGroupMessage(getConfig().getLong("bot.botaccount"),getConfig().getLong("bot.groupid"),formatText);
+                sender.sendMessage(ChatColor.translateAlternateColorCodes('&',"&a已发送QQ群聊天消息！"));
+                if(getConfig().getBoolean("general.command-also-broadcast-to-chat") && sender instanceof Player){
+                    Player player = (Player) sender;
+                    player.chat(message.toString());
+                }
             }
         }
         if(command.getName().equalsIgnoreCase("chat2qq")){
