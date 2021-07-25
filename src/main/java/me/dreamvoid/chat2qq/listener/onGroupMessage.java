@@ -1,5 +1,6 @@
-package me.dreamvoid.chat2qq;
+package me.dreamvoid.chat2qq.listener;
 
+import me.dreamvoid.chat2qq.BukkitPlugin;
 import me.dreamvoid.miraimc.bukkit.event.MiraiGroupMessageEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -7,8 +8,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
 public class onGroupMessage implements Listener {
-    private final main plugin;
-    public onGroupMessage(main plugin){
+    private final BukkitPlugin plugin;
+    public onGroupMessage(BukkitPlugin plugin){
         this.plugin = plugin;
     }
 

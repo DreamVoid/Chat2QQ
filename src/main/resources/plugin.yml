@@ -1,6 +1,6 @@
 name: Chat2QQ
-main: me.dreamvoid.chat2qq.main
-version: 1.0
+main: me.dreamvoid.chat2qq.BukkitPlugin
+version: 1.1
 author: DreamVoid
 api-version: 1.13
 prefix: MiraiMC
