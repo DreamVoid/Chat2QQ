@@ -1,6 +1,9 @@
 package me.dreamvoid.chat2qq;
 
 import me.clip.placeholderapi.PlaceholderAPI;
+import me.dreamvoid.chat2qq.listener.onGroupMessage;
+import me.dreamvoid.chat2qq.listener.onPlayerMessage;
+import me.dreamvoid.chat2qq.utils.Metrics;
 import me.dreamvoid.miraimc.api.MiraiBot;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -12,7 +15,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
-public class main extends JavaPlugin implements Listener, CommandExecutor {
+public class BukkitPlugin extends JavaPlugin implements Listener, CommandExecutor {
 
     private MiraiBot mirai;
 
