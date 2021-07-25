@@ -9,6 +9,10 @@ general:
   in-game-chat-format: "&6[%groupname%/%groupid%] &a%nick%(%qq%)&r: %message%"
   allow-console-chat: false
   console-name: "控制台"
+  requite-special-word-prefix:
+    enabled: true
+    prefix:
+      - "#"
 bot:
   botaccount: 123456
   groupid: 123456
