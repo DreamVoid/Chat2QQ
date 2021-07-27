@@ -48,8 +48,7 @@ public class onPlayerMessage implements Listener {
                 if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI")!=null){
                     formatText = PlaceholderAPI.setPlaceholders(e.getPlayer(),formatText);
                 }
-                MiraiBot.Instance.sendGroupMessage(plugin.getConfig().getLong("bot.botaccount"),plugin.getConfig().getLong("bot.groupid"),formatText);
-            }
+                MiraiBot.getBot(plugin.getConfig().getLong("bot.botaccount")).getGroup(plugin.getConfig().getLong("bot.groupid")).sendMessage(formatText);            }
         }
     }
 }
