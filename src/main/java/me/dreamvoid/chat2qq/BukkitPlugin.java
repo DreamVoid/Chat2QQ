@@ -17,8 +17,6 @@ import org.jetbrains.annotations.NotNull;
 
 public class BukkitPlugin extends JavaPlugin implements Listener, CommandExecutor {
 
-    private MiraiBot mirai;
-
     @Override // 加载插件
     public void onLoad() {
         saveDefaultConfig();
@@ -27,7 +25,6 @@ public class BukkitPlugin extends JavaPlugin implements Listener, CommandExecuto
 
     @Override // 启用插件
     public void onEnable() {
-        this.mirai = MiraiBot.Instance;
         Bukkit.getPluginManager().registerEvents(new onGroupMessage(this), this);
         Bukkit.getPluginManager().registerEvents(new onPlayerMessage(this), this);
         getCommand("qchat").setExecutor(this);
@@ -78,7 +75,7 @@ public class BukkitPlugin extends JavaPlugin implements Listener, CommandExecuto
                 if(isPlayer && Bukkit.getPluginManager().getPlugin("PlaceholderAPI")!=null){
                     formatText = PlaceholderAPI.setPlaceholders((Player) sender,formatText);
                 }
-                mirai.sendGroupMessage(getConfig().getLong("bot.botaccount"),getConfig().getLong("bot.groupid"),formatText);
+                MiraiBot.getBot(getConfig().getLong("bot.botaccount")).getGroup(getConfig().getLong("bot.groupid")).sendMessage(formatText);
                 sender.sendMessage(ChatColor.translateAlternateColorCodes('&',"&a已发送QQ群聊天消息！"));
                 if(getConfig().getBoolean("general.command-also-broadcast-to-chat") && sender instanceof Player){
                     Player player = (Player) sender;
