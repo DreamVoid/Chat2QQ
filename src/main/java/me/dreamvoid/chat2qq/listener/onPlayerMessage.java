@@ -8,6 +8,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 
 public class onPlayerMessage implements Listener {
     private final BukkitPlugin plugin;
@@ -48,7 +49,14 @@ public class onPlayerMessage implements Listener {
                 if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI")!=null){
                     formatText = PlaceholderAPI.setPlaceholders(e.getPlayer(),formatText);
                 }
-                MiraiBot.getBot(plugin.getConfig().getLong("bot.botaccount")).getGroup(plugin.getConfig().getLong("bot.groupid")).sendMessage(formatText);            }
+                String finalFormatText = formatText;
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        MiraiBot.getBot(plugin.getConfig().getLong("bot.botaccount")).getGroup(plugin.getConfig().getLong("bot.groupid")).sendMessage(finalFormatText);
+                    }
+                }.runTaskAsynchronously(plugin);
+            }
         }
     }
 }
