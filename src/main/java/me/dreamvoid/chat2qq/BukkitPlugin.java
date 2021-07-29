@@ -13,6 +13,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
 public class BukkitPlugin extends JavaPlugin implements Listener, CommandExecutor {
@@ -75,7 +76,13 @@ public class BukkitPlugin extends JavaPlugin implements Listener, CommandExecuto
                 if(isPlayer && Bukkit.getPluginManager().getPlugin("PlaceholderAPI")!=null){
                     formatText = PlaceholderAPI.setPlaceholders((Player) sender,formatText);
                 }
-                MiraiBot.getBot(getConfig().getLong("bot.botaccount")).getGroup(getConfig().getLong("bot.groupid")).sendMessage(formatText);
+                String finalFormatText = formatText;
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        MiraiBot.getBot(getConfig().getLong("bot.botaccount")).getGroup(getConfig().getLong("bot.groupid")).sendMessage(finalFormatText);
+                    }
+                }.runTaskAsynchronously(this);
                 sender.sendMessage(ChatColor.translateAlternateColorCodes('&',"&a已发送QQ群聊天消息！"));
                 if(getConfig().getBoolean("general.command-also-broadcast-to-chat") && sender instanceof Player){
                     Player player = (Player) sender;

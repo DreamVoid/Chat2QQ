@@ -13,6 +13,8 @@ general:
     enabled: true
     prefix:
       - "#"
+  replace-image-string: true
+  use-nick-if-namecard-null: false
 bot:
   botaccount: 123456
   groupid: 123456
