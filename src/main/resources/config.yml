@@ -50,6 +50,15 @@ general:
   # 仅在 MiraiMC 1.3-rc2 及之后的版本中生效
   use-nick-if-namecard-null: false
 
+  # 启用 MiraiMC 内置的QQ绑定
+  # 仅在 MiraiMC 1.3.1 及之后的版本中生效
+  use-miraimc-bind: true
+
+  # 已绑定玩家向服务器发送聊天消息的格式
+  # 如果玩家没有绑定，消息格式仍按照上方设置的格式发送
+  # 内置变量仍然可以使用
+  bind-chat-format: "&6[QQ]&r %vault_prefix%%player_name%%vault_suffix%: %message%"
+
 # 机器人配置
 # 此部分配置只会影响到QQ群的聊天
 bot:

@@ -1,7 +1,10 @@
 package me.dreamvoid.chat2qq.listener;
 
+import me.clip.placeholderapi.PlaceholderAPI;
+import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import me.dreamvoid.chat2qq.BukkitPlugin;
 import me.dreamvoid.miraimc.api.MiraiBot;
+import me.dreamvoid.miraimc.api.MiraiMC;
 import me.dreamvoid.miraimc.bukkit.event.MiraiGroupMessageEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -24,12 +27,23 @@ public class onGroupMessage implements Listener {
         if(name.equalsIgnoreCase("") && plugin.getConfig().getBoolean("general.use-nick-if-namecard-null",false)){
             name = MiraiBot.getBot(e.getBotID()).getGroup(e.getGroupID()).getMember(e.getSenderID()).getNick();
         }
-        String formatText = plugin.getConfig().getString("general.in-game-chat-format")
-                .replace("%groupname%",e.getGroupName())
-                .replace("%groupid%",String.valueOf(e.getGroupID()))
-                .replace("%nick%",name)
-                .replace("%qq%",String.valueOf(e.getSenderID()))
-                .replace("%message%",e.getMessage());
+        String formatText;
+        if(plugin.getConfig().getBoolean("general.use-miraimc-bind",true) && !MiraiMC.getBinding(e.getSenderID()).equals("")){
+            formatText = plugin.getConfig().getString("general.bind-chat-format")
+                    .replace("%groupname%",e.getGroupName())
+                    .replace("%groupid%",String.valueOf(e.getGroupID()))
+                    .replace("%nick%",name)
+                    .replace("%qq%",String.valueOf(e.getSenderID()))
+                    .replace("%message%",e.getMessage());
+            if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null){
+                formatText = PlaceholderAPI.setPlaceholders(Bukkit.getOfflinePlayer(MiraiMC.getBindingName(e.getSenderID())),formatText);
+            }
+        } else formatText = plugin.getConfig().getString("general.in-game-chat-format")
+                    .replace("%groupname%",e.getGroupName())
+                    .replace("%groupid%",String.valueOf(e.getGroupID()))
+                    .replace("%nick%",name)
+                    .replace("%qq%",String.valueOf(e.getSenderID()))
+                    .replace("%message%",e.getMessage());
 
         if(plugin.getConfig().getBoolean("general.replace-image-string",true)){
             String[] regexs = {"\\[mirai:image.*.jpg\\]","\\[mirai:image.*.png\\]","\\[mirai:image.*.gif\\]","\\[mirai:image.*.mirai\\]"};
@@ -52,7 +66,6 @@ public class onGroupMessage implements Listener {
         } else allowPrefix = true;
 
         if(e.getBotID() == plugin.getConfig().getLong("bot.botaccount") && e.getGroupID() == plugin.getConfig().getLong("bot.groupid") && allowPrefix){
-            System.out.println(1);
             Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&',formatText));
         }
     }
