@@ -1,7 +1,6 @@
 package me.dreamvoid.chat2qq.listener;
 
 import me.clip.placeholderapi.PlaceholderAPI;
-import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import me.dreamvoid.chat2qq.BukkitPlugin;
 import me.dreamvoid.miraimc.api.MiraiBot;
 import me.dreamvoid.miraimc.api.MiraiMC;
@@ -10,9 +9,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class onGroupMessage implements Listener {
     private final BukkitPlugin plugin;
@@ -34,7 +30,7 @@ public class onGroupMessage implements Listener {
                     .replace("%groupid%",String.valueOf(e.getGroupID()))
                     .replace("%nick%",name)
                     .replace("%qq%",String.valueOf(e.getSenderID()))
-                    .replace("%message%",e.getMessage());
+                    .replace("%message%",e.getMessageContent());
             if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null){
                 formatText = PlaceholderAPI.setPlaceholders(Bukkit.getOfflinePlayer(MiraiMC.getBindingName(e.getSenderID())),formatText);
             }
@@ -43,16 +39,7 @@ public class onGroupMessage implements Listener {
                     .replace("%groupid%",String.valueOf(e.getGroupID()))
                     .replace("%nick%",name)
                     .replace("%qq%",String.valueOf(e.getSenderID()))
-                    .replace("%message%",e.getMessage());
-
-        if(plugin.getConfig().getBoolean("general.replace-image-string",true)){
-            String[] regexs = {"\\[mirai:image.*.jpg\\]","\\[mirai:image.*.png\\]","\\[mirai:image.*.gif\\]","\\[mirai:image.*.mirai\\]"};
-            for(String regex: regexs){
-                Pattern p = Pattern.compile(regex);
-                Matcher m = p.matcher(formatText);
-                formatText = m.replaceAll("[图片]");
-            }
-        }
+                    .replace("%message%",e.getMessageContent());
 
         // 判断消息是否带前缀
         if(plugin.getConfig().getBoolean("bot.requite-special-word-prefix.enabled",false)){
