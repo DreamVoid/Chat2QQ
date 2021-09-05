@@ -42,16 +42,10 @@ general:
     prefix:
       - "#"
 
-  # 是否替换聊天消息中的图片内容
-  # 图片将会替换成“[图片]”
-  replace-image-string: true
-
   # 当群名片不存在时是否尝试获取昵称
-  # 仅在 MiraiMC 1.3-rc2 及之后的版本中生效
   use-nick-if-namecard-null: false
 
   # 启用 MiraiMC 内置的QQ绑定
-  # 仅在 MiraiMC 1.3.1 及之后的版本中生效
   use-miraimc-bind: true
 
   # 已绑定玩家向服务器发送聊天消息的格式
