@@ -2,7 +2,9 @@ package me.dreamvoid.chat2qq;
 
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.dreamvoid.chat2qq.listener.onGroupMessage;
+import me.dreamvoid.chat2qq.listener.onPlayerJoin;
 import me.dreamvoid.chat2qq.listener.onPlayerMessage;
+import me.dreamvoid.chat2qq.listener.onPlayerQuit;
 import me.dreamvoid.chat2qq.utils.Metrics;
 import me.dreamvoid.miraimc.api.MiraiBot;
 import org.bukkit.Bukkit;
@@ -28,6 +30,8 @@ public class BukkitPlugin extends JavaPlugin implements Listener, CommandExecuto
     public void onEnable() {
         Bukkit.getPluginManager().registerEvents(new onGroupMessage(this), this);
         Bukkit.getPluginManager().registerEvents(new onPlayerMessage(this), this);
+        Bukkit.getPluginManager().registerEvents(new onPlayerJoin(this), this);
+        Bukkit.getPluginManager().registerEvents(new onPlayerQuit(this), this);
         getCommand("qchat").setExecutor(this);
         getCommand("chat2qq").setExecutor(this);
         if(getConfig().getBoolean("general.allow-bStats",true)){
