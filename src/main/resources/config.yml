@@ -76,3 +76,16 @@ bot:
   # %player% - 玩家显示昵称
   # %message% - 消息内容
   group-chat-format: "[MC] %player%: %message%"
+
+  # 是否发送玩家进服退服消息
+  send-player-join-quit-message: false
+
+  # 进服消息
+  # 自带变量：
+  # %player% - 玩家显示昵称
+  player-join-message: "%player% 进入服务器"
+
+  # 退服消息
+  # 自带变量：
+  # %player% - 玩家显示昵称
+  player-quit-message: "%player% 离开服务器"
