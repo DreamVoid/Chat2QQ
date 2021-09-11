@@ -44,7 +44,7 @@ public class onGroupMessage implements Listener {
         // 判断消息是否带前缀
         if(plugin.getConfig().getBoolean("bot.requite-special-word-prefix.enabled",false)){
             for(String prefix : plugin.getConfig().getStringList("bot.requite-special-word-prefix.prefix")){
-                if(e.getMessage().startsWith(prefix)){
+                if(e.getMessageToMiraiCode().startsWith(prefix)){
                     allowPrefix = true;
                     formatText = formatText.replace(prefix,"");
                     break;
