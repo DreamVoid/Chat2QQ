@@ -1,5 +1,5 @@
 # Chat2QQ
-Bukkit QQ群聊天插件
+适用于Minecraft服务端的QQ群聊天插件
 
 ## 介绍
 Chat2QQ 是一个基于[MiraiMC](https://github.com/DreamVoid/MiraiMC)的Bukkit插件，能够让你在Minecraft服务器上与QQ群的玩家聊天，也能在QQ群上与Minecraft服务器的玩家聊天。
