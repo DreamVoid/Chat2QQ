@@ -1,4 +1,4 @@
-package me.dreamvoid.chat2qq.utils;
+package me.dreamvoid.chat2qq.bukkit.utils;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;

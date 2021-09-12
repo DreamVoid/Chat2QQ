@@ -1,7 +1,7 @@
-package me.dreamvoid.chat2qq.listener;
+package me.dreamvoid.chat2qq.bukkit.listener;
 
 import me.clip.placeholderapi.PlaceholderAPI;
-import me.dreamvoid.chat2qq.BukkitPlugin;
+import me.dreamvoid.chat2qq.bukkit.BukkitPlugin;
 import me.dreamvoid.miraimc.api.MiraiBot;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
@@ -53,7 +53,7 @@ public class onPlayerMessage implements Listener {
                 new BukkitRunnable() {
                     @Override
                     public void run() {
-                        MiraiBot.getBot(plugin.getConfig().getLong("bot.botaccount")).getGroup(plugin.getConfig().getLong("bot.groupid")).sendMessage(finalFormatText);
+                        MiraiBot.getBot(plugin.getConfig().getLong("bot.botaccount")).getGroup(plugin.getConfig().getLong("bot.groupid")).sendMessageMirai(finalFormatText);
                     }
                 }.runTaskAsynchronously(plugin);
             }
