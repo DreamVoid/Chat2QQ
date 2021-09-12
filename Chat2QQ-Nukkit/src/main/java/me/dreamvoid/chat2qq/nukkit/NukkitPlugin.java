@@ -11,6 +11,7 @@ import me.dreamvoid.chat2qq.nukkit.listener.onPlayerQuit;
 import me.dreamvoid.chat2qq.nukkit.listener.onGroupMessage;
 import me.dreamvoid.chat2qq.nukkit.listener.onPlayerJoin;
 import me.dreamvoid.miraimc.api.MiraiBot;
+import me.dreamvoid.miraimc.nukkit.utils.MetricsLite;
 
 public class NukkitPlugin extends PluginBase {
     @Override
@@ -25,6 +26,10 @@ public class NukkitPlugin extends PluginBase {
         getServer().getPluginManager().registerEvents(new onPlayerMessage(this), this);
         getServer().getPluginManager().registerEvents(new onPlayerJoin(this), this);
         getServer().getPluginManager().registerEvents(new onPlayerQuit(this), this);
+        if (getConfig().getBoolean("general.allow-bStats", true)) {
+            int pluginId = 12765;
+            new MetricsLite(this, pluginId);
+        }
     }
 
     @Override
@@ -38,8 +43,7 @@ public class NukkitPlugin extends PluginBase {
             String playerName;
             boolean allowConsole = getConfig().getBoolean("general.allow-console-chat", false);
 
-            if(sender instanceof Player){
-                Player player = (Player) sender;
+            if(sender instanceof Player player){
                 playerName = player.getDisplayName();
             } else {
                 if(allowConsole){
@@ -63,8 +67,7 @@ public class NukkitPlugin extends PluginBase {
                 }
             });
             sender.sendMessage(TextFormat.colorize('&',"&a已发送QQ群聊天消息！"));
-            if(getConfig().getBoolean("general.command-also-broadcast-to-chat") && sender instanceof Player){
-                Player player = (Player) sender;
+            if(getConfig().getBoolean("general.command-also-broadcast-to-chat") && sender instanceof Player player){
                 player.chat(message.toString());
             }
 
