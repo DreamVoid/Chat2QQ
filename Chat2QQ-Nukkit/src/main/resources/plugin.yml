@@ -1,0 +1,21 @@
+name: Chat2QQ
+main: me.dreamvoid.chat2qq.nukkit.NukkitPlugin
+version: ${project.version}
+author: DreamVoid
+api: ["1.0.13"]
+prefix: MiraiMC
+depend:
+  - MiraiMC
+commands:
+  qchat:
+    description: 发送聊天消息到QQ群
+    permission: miraimc.command.qchat
+  chat2qq:
+    description: Chat2QQ 插件主命令
+permissions:
+  miraimc.command.qchat:
+    description: 允许使用 /qchat
+    default: true
+  miraimc.command.chat2qq:
+    description: 允许使用 /chat2qq
+    default: op

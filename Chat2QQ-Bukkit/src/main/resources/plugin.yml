@@ -1,5 +1,5 @@
 name: Chat2QQ
-main: me.dreamvoid.chat2qq.BukkitPlugin
+main: me.dreamvoid.chat2qq.bukkit.BukkitPlugin
 version: ${project.version}
 author: DreamVoid
 api-version: 1.13
