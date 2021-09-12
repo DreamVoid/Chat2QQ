@@ -1,7 +1,7 @@
-package me.dreamvoid.chat2qq.listener;
+package me.dreamvoid.chat2qq.bukkit.listener;
 
 import me.clip.placeholderapi.PlaceholderAPI;
-import me.dreamvoid.chat2qq.BukkitPlugin;
+import me.dreamvoid.chat2qq.bukkit.BukkitPlugin;
 import me.dreamvoid.miraimc.api.MiraiBot;
 import me.dreamvoid.miraimc.api.MiraiMC;
 import me.dreamvoid.miraimc.bukkit.event.MiraiGroupMessageEvent;
@@ -32,7 +32,7 @@ public class onGroupMessage implements Listener {
                     .replace("%qq%",String.valueOf(e.getSenderID()))
                     .replace("%message%",e.getMessageContent());
             if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null){
-                formatText = PlaceholderAPI.setPlaceholders(Bukkit.getOfflinePlayer(MiraiMC.getBindingName(e.getSenderID())),formatText);
+                formatText = PlaceholderAPI.setPlaceholders(Bukkit.getOfflinePlayer(MiraiMC.getBinding(e.getSenderID())),formatText);
             }
         } else formatText = plugin.getConfig().getString("general.in-game-chat-format")
                     .replace("%groupname%",e.getGroupName())
@@ -44,7 +44,7 @@ public class onGroupMessage implements Listener {
         // 判断消息是否带前缀
         if(plugin.getConfig().getBoolean("bot.requite-special-word-prefix.enabled",false)){
             for(String prefix : plugin.getConfig().getStringList("bot.requite-special-word-prefix.prefix")){
-                if(e.getMessageToMiraiCode().startsWith(prefix)){
+                if(e.getMessageContent().startsWith(prefix)){
                     allowPrefix = true;
                     formatText = formatText.replace(prefix,"");
                     break;

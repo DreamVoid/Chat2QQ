@@ -1,11 +1,11 @@
-package me.dreamvoid.chat2qq;
+package me.dreamvoid.chat2qq.bukkit;
 
 import me.clip.placeholderapi.PlaceholderAPI;
-import me.dreamvoid.chat2qq.listener.onGroupMessage;
-import me.dreamvoid.chat2qq.listener.onPlayerJoin;
-import me.dreamvoid.chat2qq.listener.onPlayerMessage;
-import me.dreamvoid.chat2qq.listener.onPlayerQuit;
-import me.dreamvoid.chat2qq.utils.Metrics;
+import me.dreamvoid.chat2qq.bukkit.listener.onGroupMessage;
+import me.dreamvoid.chat2qq.bukkit.listener.onPlayerJoin;
+import me.dreamvoid.chat2qq.bukkit.listener.onPlayerMessage;
+import me.dreamvoid.chat2qq.bukkit.listener.onPlayerQuit;
+import me.dreamvoid.chat2qq.bukkit.utils.Metrics;
 import me.dreamvoid.miraimc.api.MiraiBot;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -84,7 +84,7 @@ public class BukkitPlugin extends JavaPlugin implements Listener, CommandExecuto
                 new BukkitRunnable() {
                     @Override
                     public void run() {
-                        MiraiBot.getBot(getConfig().getLong("bot.botaccount")).getGroup(getConfig().getLong("bot.groupid")).sendMessage(finalFormatText);
+                        MiraiBot.getBot(getConfig().getLong("bot.botaccount")).getGroup(getConfig().getLong("bot.groupid")).sendMessageMirai(finalFormatText);
                     }
                 }.runTaskAsynchronously(this);
                 sender.sendMessage(ChatColor.translateAlternateColorCodes('&',"&a已发送QQ群聊天消息！"));
