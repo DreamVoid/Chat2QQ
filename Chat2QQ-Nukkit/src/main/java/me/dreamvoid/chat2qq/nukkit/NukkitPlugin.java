@@ -43,8 +43,8 @@ public class NukkitPlugin extends PluginBase {
             String playerName;
             boolean allowConsole = getConfig().getBoolean("general.allow-console-chat", false);
 
-            if(sender instanceof Player player){
-                playerName = player.getDisplayName();
+            if(sender instanceof Player){
+                playerName = ((Player) sender).getDisplayName();
             } else {
                 if(allowConsole){
                     playerName = getConfig().getString("general.console-name", "控制台");
@@ -67,8 +67,8 @@ public class NukkitPlugin extends PluginBase {
                 }
             });
             sender.sendMessage(TextFormat.colorize('&',"&a已发送QQ群聊天消息！"));
-            if(getConfig().getBoolean("general.command-also-broadcast-to-chat") && sender instanceof Player player){
-                player.chat(message.toString());
+            if(getConfig().getBoolean("general.command-also-broadcast-to-chat") && sender instanceof Player){
+                ((Player) sender).chat(message.toString());
             }
 
         }
