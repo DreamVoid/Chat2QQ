@@ -15,7 +15,7 @@ public class onPlayerQuit implements Listener {
 
     @EventHandler
     public void onPlayerQuitEvent(PlayerQuitEvent e){
-        if(plugin.getConfig().getBoolean("bot.send-player-join-quit-message",false)){
+        if(plugin.getConfig().getBoolean("bot.send-player-join-quit-message",false)&&!e.getPlayer().hasPermission("chat2qq.quit.silent")){
             new BukkitRunnable() {
                 @Override
                 public void run() {

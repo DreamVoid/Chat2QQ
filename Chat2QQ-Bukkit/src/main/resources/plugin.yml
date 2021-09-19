@@ -15,6 +15,12 @@ commands:
   chat2qq:
     description: Chat2QQ 插件主命令
 permissions:
+  chat2qq.join.silent:
+    description: 允许悄悄加入服务器
+    default: false
+  chat2qq.quit.silent:
+    description: 允许悄悄离开服务器
+    default: false
   miraimc.command.qchat:
     description: 允许使用 /qchat
     default: true

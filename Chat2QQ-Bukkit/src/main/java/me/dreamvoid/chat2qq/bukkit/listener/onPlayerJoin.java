@@ -15,7 +15,7 @@ public class onPlayerJoin implements Listener {
 
     @EventHandler
     public void onPlayerJoinEvent(PlayerJoinEvent e){
-        if(plugin.getConfig().getBoolean("bot.send-player-join-quit-message",false)){
+        if(plugin.getConfig().getBoolean("bot.send-player-join-quit-message",false)&&!e.getPlayer().hasPermission("chat2qq.join.silent")){
             new BukkitRunnable() {
                 @Override
                 public void run() {
