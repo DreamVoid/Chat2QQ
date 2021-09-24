@@ -19,6 +19,18 @@
         <maven.compiler.target>8</maven.compiler.target>
     </properties>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>io.github.dreamvoid</groupId>
+                <artifactId>MiraiMC-Integration</artifactId>
+                <!--请确保版本为Github上的最新版本-->
+                <version>1.5</version>
+                <scope>provided</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <build>
         <finalName>${project.artifactId}</finalName>
         <plugins>
