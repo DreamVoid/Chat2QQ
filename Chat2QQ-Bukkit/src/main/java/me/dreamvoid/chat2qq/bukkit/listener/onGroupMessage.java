@@ -18,7 +18,6 @@ public class onGroupMessage implements Listener {
 
     @EventHandler
     public void onGroupMessageReceive(MiraiGroupMessageEvent e){
-        boolean allowPrefix = false;
         String name = e.getSenderNameCard();
         if(name.equalsIgnoreCase("") && plugin.getConfig().getBoolean("general.use-nick-if-namecard-null",false)){
             name = MiraiBot.getBot(e.getBotID()).getGroup(e.getGroupID()).getMember(e.getSenderID()).getNick();
@@ -42,6 +41,7 @@ public class onGroupMessage implements Listener {
                     .replace("%message%",e.getMessageContent());
 
         // 判断消息是否带前缀
+        boolean allowPrefix = false;
         if(plugin.getConfig().getBoolean("bot.requite-special-word-prefix.enabled",false)){
             for(String prefix : plugin.getConfig().getStringList("bot.requite-special-word-prefix.prefix")){
                 if(e.getMessageContent().startsWith(prefix)){
