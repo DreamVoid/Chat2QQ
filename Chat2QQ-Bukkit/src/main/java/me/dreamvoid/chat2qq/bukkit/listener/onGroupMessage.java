@@ -10,6 +10,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
+import java.util.UUID;
+
 public class onGroupMessage implements Listener {
     private final BukkitPlugin plugin;
     public onGroupMessage(BukkitPlugin plugin){
@@ -31,7 +33,7 @@ public class onGroupMessage implements Listener {
                     .replace("%qq%",String.valueOf(e.getSenderID()))
                     .replace("%message%",e.getMessageContent());
             if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null){
-                formatText = PlaceholderAPI.setPlaceholders(Bukkit.getOfflinePlayer(MiraiMC.getBinding(e.getSenderID())),formatText);
+                formatText = PlaceholderAPI.setPlaceholders(Bukkit.getOfflinePlayer(UUID.fromString(MiraiMC.getBinding(e.getSenderID()))),formatText);
             }
         } else formatText = plugin.getConfig().getString("general.in-game-chat-format")
                     .replace("%groupname%",e.getGroupName())
