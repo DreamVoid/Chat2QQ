@@ -16,6 +16,10 @@ public class onPlayerMessage implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerChat(PlayerChatEvent e){
+        if(e.isCancelled()){
+            return;
+        }
+
         if(!(plugin.getConfig().getBoolean("general.require-command-to-chat",false))){
             boolean allowPrefix = false;
             String formatText = plugin.getConfig().getString("bot.group-chat-format")

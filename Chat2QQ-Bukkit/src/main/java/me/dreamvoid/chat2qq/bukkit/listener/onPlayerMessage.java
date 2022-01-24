@@ -18,6 +18,10 @@ public class onPlayerMessage implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerChat(AsyncPlayerChatEvent e){
+        if(e.isCancelled()){
+            return;
+        }
+
         if(!(plugin.getConfig().getBoolean("general.require-command-to-chat",false))){
             boolean allowWorld = false;
             boolean allowPrefix = false;
