@@ -48,11 +48,5 @@
             <version>1.0-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>io.github.dreamvoid</groupId>
-            <artifactId>MiraiMC-Integration</artifactId>
-            <!--请确保版本为Github上的最新版本-->
-            <scope>provided</scope>
-        </dependency>
     </dependencies>
 </project>
