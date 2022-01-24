@@ -29,12 +29,6 @@
     </repositories>
 
     <dependencies>
-        <dependency>
-            <groupId>io.github.dreamvoid</groupId>
-            <artifactId>MiraiMC-Integration</artifactId>
-            <!--请确保版本为Github上的最新版本-->
-            <scope>provided</scope>
-        </dependency>
         <!--This adds the Spigot API artifact to the build -->
         <dependency>
             <groupId>org.spigotmc</groupId>
