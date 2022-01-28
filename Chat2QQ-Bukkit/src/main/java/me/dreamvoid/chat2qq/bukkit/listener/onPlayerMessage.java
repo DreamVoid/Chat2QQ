@@ -16,7 +16,7 @@ public class onPlayerMessage implements Listener {
         this.plugin = plugin;
     }
 
-    @EventHandler(priority = EventPriority.LOWEST)
+    @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerChat(AsyncPlayerChatEvent e){
         if(e.isCancelled()){
             return;
