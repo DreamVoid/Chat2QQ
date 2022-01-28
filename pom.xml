@@ -10,6 +10,7 @@
     <version>1.4.2</version>
     <modules>
         <module>Chat2QQ-Bukkit</module>
+        <module>Chat2QQ-Bungee</module>
         <module>Chat2QQ-Nukkit</module>
     </modules>
 
