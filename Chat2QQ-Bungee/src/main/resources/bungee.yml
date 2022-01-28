@@ -4,4 +4,4 @@ main: me.dreamvoid.chat2qq.bungee.BungeePlugin
 author: DreamVoid
 depends:
   - MiraiMC
-description:
+description: Chat with QQ group.
