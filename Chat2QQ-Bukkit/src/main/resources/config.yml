@@ -57,10 +57,14 @@ general:
 # 此部分配置只会影响到QQ群的聊天
 bot:
   # 指定使用的QQ号，只有这个QQ号接收到的群消息才会被处理
-  botaccount: 123456
+  # 请至少设置一个
+  bot-accounts:
+    - 123456
 
   # 指定接收指定群的群消息，只有这个群接收到的消息才会被处理
-  groupid: 123456
+  # 请至少设置一个
+  group-ids:
+    - 123456
 
   # 群聊天前缀（聊天需要带有指定前缀才能发送到服务器）
   requite-special-word-prefix:

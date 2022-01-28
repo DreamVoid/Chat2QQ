@@ -11,7 +11,11 @@ import me.dreamvoid.chat2qq.nukkit.listener.onPlayerQuit;
 import me.dreamvoid.chat2qq.nukkit.listener.onGroupMessage;
 import me.dreamvoid.chat2qq.nukkit.listener.onPlayerJoin;
 import me.dreamvoid.miraimc.api.MiraiBot;
+import me.dreamvoid.miraimc.internal.httpapi.MiraiHttpAPI;
+import me.dreamvoid.miraimc.internal.httpapi.exception.AbnormalStatusException;
 import me.dreamvoid.miraimc.nukkit.utils.MetricsLite;
+
+import java.io.IOException;
 
 public class NukkitPlugin extends PluginBase {
     @Override
@@ -63,7 +67,13 @@ public class NukkitPlugin extends PluginBase {
             getServer().getScheduler().scheduleAsyncTask(this, new AsyncTask() {
                 @Override
                 public void onRun() {
-                    MiraiBot.getBot(getConfig().getLong("bot.botaccount")).getGroup(getConfig().getLong("bot.groupid")).sendMessageMirai(formatText);
+                    getConfig().getLongList("bot.bot-accounts").forEach(bot -> getConfig().getLongList("bot.group-ids").forEach(group -> {
+                        try {
+                            MiraiHttpAPI.INSTANCE.sendGroupMessage(MiraiHttpAPI.Bots.get(bot), group, formatText);
+                        } catch (IOException | AbnormalStatusException ex) {
+                            getLogger().warning("使用" + bot + "发送消息时出现异常，原因: " + ex);
+                        }
+                    }));
                 }
             });
             sender.sendMessage(TextFormat.colorize('&',"&a已发送QQ群聊天消息！"));
