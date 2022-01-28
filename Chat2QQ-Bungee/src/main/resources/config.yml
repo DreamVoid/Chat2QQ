@@ -1,0 +1,96 @@
+# 游戏内配置
+# 此部分配置只会影响 Minecraft 服务器内的聊天
+general:
+  # 是否允许bStats统计
+  allow-bStats: true
+
+  # 是否必须使用命令才能向QQ群发送聊天消息（Bungee下此设置强制为true）
+  require-command-to-chat: true
+
+  # 使用命令时是否同时向服务器内发送聊天消息
+  command-also-broadcast-to-chat: true
+
+  # 可用的服务器，玩家只有在下面列出的服务器中，QQ群的聊天才会被发送到玩家
+  available-servers:
+    - server1
+    - spawn
+
+  # 是否将上面的列表用作黑名单，即玩家在上面列出的服务器时，QQ群聊天不会发送到玩家
+  available-servers-use-as-blacklist: false
+
+  # QQ群消息广播到游戏内聊天的格式（可以使用样式代码）
+  # 变量：
+  # %groupname% - 群名称
+  # %groupid% - 群号
+  # %nick% - 发送者群名片
+  # %qq% - 发送者QQ号
+  # %message% - 消息内容
+  in-game-chat-format: "&6[%groupname%/%groupid%] &a%nick%(%qq%)&r: %message%"
+
+  # 是否允许控制台使用聊天命令
+  allow-console-chat: false
+
+  # 如果作为控制台发送到QQ群的聊天消息，控制台要叫什么名字
+  console-name: "控制台"
+
+  # 游戏聊天前缀（聊天需要带有指定前缀才能发送到QQ群）
+  requite-special-word-prefix:
+    #启用这个功能
+    enabled: true
+
+    # 聊天前缀（可设置多个，群聊天只有带下面的前缀之一才会发送到服务器）
+    prefix:
+      - "#"
+
+  # 当群名片不存在时是否尝试获取昵称
+  use-nick-if-namecard-null: false
+
+  # 启用 MiraiMC 内置的QQ绑定
+  use-miraimc-bind: true
+
+  # 已绑定玩家向服务器发送聊天消息的格式
+  # 如果玩家没有绑定，消息格式仍按照上方设置的格式发送
+  # 内置变量仍然可以使用
+  # 额外变量：%player% - 玩家显示昵称
+  bind-chat-format: "&6[QQ]&r %player%: %message%"
+
+# 机器人配置
+# 此部分配置只会影响到QQ群的聊天
+bot:
+  # 指定使用的QQ号，只有这个QQ号接收到的群消息才会被处理
+  # 请至少设置一个
+  bot-accounts:
+    - 123456
+
+  # 指定接收指定群的群消息，只有这个群接收到的消息才会被处理
+  # 请至少设置一个
+  group-ids:
+    - 123456
+
+  # 群聊天前缀（聊天需要带有指定前缀才能发送到服务器）
+  requite-special-word-prefix:
+    #启用这个功能
+    enabled: true
+
+    # 聊天前缀（可设置多个，群聊天只有带下面的前缀之一才会发送到服务器）
+    prefix:
+      - "#"
+
+  # 服务器消息发送到QQ群的格式
+  # 自带变量：
+  # %player% - 玩家显示昵称
+  # %message% - 消息内容
+  group-chat-format: "[MC] %player%: %message%"
+
+  # 是否发送玩家进服退服消息
+  send-player-join-quit-message: false
+
+  # 进服消息
+  # 自带变量：
+  # %player% - 玩家显示昵称
+  player-join-message: "%player% 进入服务器"
+
+  # 退服消息
+  # 自带变量：
+  # %player% - 玩家显示昵称
+  player-quit-message: "%player% 离开服务器"
