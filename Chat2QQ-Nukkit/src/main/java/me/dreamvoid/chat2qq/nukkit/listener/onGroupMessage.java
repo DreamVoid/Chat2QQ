@@ -28,18 +28,18 @@ public class onGroupMessage implements Listener {
                     .replace("%groupid%",String.valueOf(e.getGroupID()))
                     .replace("%nick%",name)
                     .replace("%qq%",String.valueOf(e.getSenderID()))
-                    .replace("%message%",e.getMessageContent());
+                    .replace("%message%",e.getMessage());
         } else formatText = plugin.getConfig().getString("general.in-game-chat-format")
                     .replace("%groupname%",e.getGroupName())
                     .replace("%groupid%",String.valueOf(e.getGroupID()))
                     .replace("%nick%",name)
                     .replace("%qq%",String.valueOf(e.getSenderID()))
-                    .replace("%message%",e.getMessageContent());
+                    .replace("%message%",e.getMessage());
 
         // 判断消息是否带前缀
         if(plugin.getConfig().getBoolean("bot.requite-special-word-prefix.enabled",false)){
             for(String prefix : plugin.getConfig().getStringList("bot.requite-special-word-prefix.prefix")){
-                if(e.getMessageContent().startsWith(prefix)){
+                if(e.getMessage().startsWith(prefix)){
                     allowPrefix = true;
                     formatText = formatText.replace(prefix,"");
                     break;
@@ -47,7 +47,7 @@ public class onGroupMessage implements Listener {
             }
         } else allowPrefix = true;
 
-        if(e.getBotID() == plugin.getConfig().getLong("bot.botaccount") && e.getGroupID() == plugin.getConfig().getLong("bot.groupid") && allowPrefix){
+        if(plugin.getConfig().getLongList("bot.bot-accounts").contains(e.getBotID()) && plugin.getConfig().getLongList("bot.group-ids").contains(e.getGroupID()) && allowPrefix){
             plugin.getServer().broadcastMessage(TextFormat.colorize('&',formatText));
         }
     }
