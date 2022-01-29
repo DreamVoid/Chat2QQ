@@ -7,7 +7,7 @@
     <groupId>io.github.dreamvoid</groupId>
     <artifactId>Chat2QQ</artifactId>
     <packaging>pom</packaging>
-    <version>1.4.2</version>
+    <version>1.5</version>
     <modules>
         <module>Chat2QQ-Bukkit</module>
         <module>Chat2QQ-Bungee</module>
