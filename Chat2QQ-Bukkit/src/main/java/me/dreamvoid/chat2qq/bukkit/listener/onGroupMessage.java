@@ -48,7 +48,7 @@ public class onGroupMessage implements Listener {
             for(String prefix : plugin.getConfig().getStringList("bot.requite-special-word-prefix.prefix")){
                 if(e.getMessage().startsWith(prefix)){
                     allowPrefix = true;
-                    formatText = formatText.replace(prefix,"");
+                    formatText = formatText.substring(1);
                     break;
                 }
             }
