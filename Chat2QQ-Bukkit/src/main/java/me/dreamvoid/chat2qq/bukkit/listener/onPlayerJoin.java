@@ -4,12 +4,14 @@ import me.dreamvoid.chat2qq.bukkit.BukkitPlugin;
 import me.dreamvoid.miraimc.api.MiraiBot;
 import me.dreamvoid.miraimc.internal.httpapi.MiraiHttpAPI;
 import me.dreamvoid.miraimc.internal.httpapi.exception.AbnormalStatusException;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.NoSuchElementException;
 
 public class onPlayerJoin implements Listener {
@@ -17,10 +19,11 @@ public class onPlayerJoin implements Listener {
     public onPlayerJoin(BukkitPlugin plugin){
         this.plugin = plugin;
     }
+    private static HashMap<Player,Boolean> cache = new HashMap<>();
 
     @EventHandler
     public void onPlayerJoinEvent(PlayerJoinEvent e){
-        if(plugin.getConfig().getBoolean("bot.send-player-join-quit-message",false)&&!e.getPlayer().hasPermission("chat2qq.join.silent")){
+        if(plugin.getConfig().getBoolean("bot.send-player-join-quit-message",false) && !e.getPlayer().hasPermission("chat2qq.join.silent") && !cache.containsKey(e.getPlayer())){
             new BukkitRunnable() {
                 @Override
                 public void run() {
@@ -36,6 +39,17 @@ public class onPlayerJoin implements Listener {
                                     plugin.getLogger().warning("使用" + bot + "发送消息时出现异常，原因: " + ex);
                                 }
                             } else plugin.getLogger().warning("指定的机器人" + bot + "不存在，是否已经登录了机器人？");
+                        } finally {
+                            int interval = plugin.getConfig().getInt("bot.player-join-message-interval");
+                            if(interval > 0) {
+                                cache.put(e.getPlayer(), true);
+                                new BukkitRunnable() {
+                                    @Override
+                                    public void run() {
+                                        cache.remove(e.getPlayer());
+                                    }
+                                }.runTaskLaterAsynchronously(plugin,interval * 20L);
+                            }
                         }
                     }));
                 }

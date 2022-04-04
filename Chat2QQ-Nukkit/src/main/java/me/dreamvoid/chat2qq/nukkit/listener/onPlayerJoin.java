@@ -1,5 +1,6 @@
 package me.dreamvoid.chat2qq.nukkit.listener;
 
+import cn.nukkit.Player;
 import cn.nukkit.event.EventHandler;
 import cn.nukkit.event.Listener;
 import cn.nukkit.event.player.PlayerJoinEvent;
@@ -10,17 +11,20 @@ import me.dreamvoid.miraimc.internal.httpapi.MiraiHttpAPI;
 import me.dreamvoid.miraimc.internal.httpapi.exception.AbnormalStatusException;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.NoSuchElementException;
+import java.util.concurrent.TimeUnit;
 
 public class onPlayerJoin implements Listener {
     private final NukkitPlugin plugin;
     public onPlayerJoin(NukkitPlugin plugin){
         this.plugin = plugin;
     }
+    private static HashMap<Player,Boolean> cache = new HashMap<>();
 
     @EventHandler
     public void onPlayerJoinEvent(PlayerJoinEvent e){
-        if(plugin.getConfig().getBoolean("bot.send-player-join-quit-message",false)&&!e.getPlayer().hasPermission("chat2qq.join.silent")){
+        if(plugin.getConfig().getBoolean("bot.send-player-join-quit-message",false)&&!e.getPlayer().hasPermission("chat2qq.join.silent") && !cache.containsKey(e.getPlayer())){
             plugin.getServer().getScheduler().scheduleAsyncTask(plugin, new AsyncTask() {
                 @Override
                 public void onRun() {
@@ -36,6 +40,17 @@ public class onPlayerJoin implements Listener {
                                     plugin.getLogger().warning("使用" + bot + "发送消息时出现异常，原因: " + ex);
                                 }
                             } else plugin.getLogger().warning("指定的机器人" + bot + "不存在，是否已经登录了机器人？");
+                        } finally {
+                            int interval = plugin.getConfig().getInt("bot.player-join-message-interval");
+                            if(interval > 0) {
+                                cache.put(e.getPlayer(), true);
+                                plugin.getServer().getScheduler().scheduleDelayedTask(plugin, new AsyncTask() {
+                                    @Override
+                                    public void onRun() {
+                                        cache.remove(e.getPlayer());
+                                    }
+                                },interval * 1000, true);
+                            }
                         }
                     }));
                 }
