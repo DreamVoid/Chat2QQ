@@ -1,5 +1,6 @@
 package me.dreamvoid.chat2qq.nukkit.listener;
 
+import cn.nukkit.Player;
 import cn.nukkit.event.EventHandler;
 import cn.nukkit.event.Listener;
 import cn.nukkit.event.player.PlayerQuitEvent;
@@ -10,6 +11,7 @@ import me.dreamvoid.miraimc.internal.httpapi.MiraiHttpAPI;
 import me.dreamvoid.miraimc.internal.httpapi.exception.AbnormalStatusException;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.NoSuchElementException;
 
 public class onPlayerQuit implements Listener {
@@ -17,10 +19,11 @@ public class onPlayerQuit implements Listener {
     public onPlayerQuit(NukkitPlugin plugin){
         this.plugin = plugin;
     }
+    private static HashMap<Player,Boolean> cache = new HashMap<>();
 
     @EventHandler
     public void onPlayerQuitEvent(PlayerQuitEvent e){
-        if(plugin.getConfig().getBoolean("bot.send-player-join-quit-message",false)&&!e.getPlayer().hasPermission("chat2qq.quit.silent")){
+        if(plugin.getConfig().getBoolean("bot.send-player-join-quit-message",false)&&!e.getPlayer().hasPermission("chat2qq.quit.silent") && !cache.containsKey(e.getPlayer())){
             plugin.getServer().getScheduler().scheduleAsyncTask(plugin, new AsyncTask() {
                 @Override
                 public void onRun() {
@@ -33,6 +36,17 @@ public class onPlayerQuit implements Listener {
                                 MiraiHttpAPI.INSTANCE.sendGroupMessage(MiraiHttpAPI.Bots.get(bot), group, message);
                             } catch (IOException | AbnormalStatusException ex) {
                                 plugin.getLogger().warning("使用" + bot + "发送消息时出现异常，原因: " + ex);
+                            }
+                        } finally {
+                            int interval = plugin.getConfig().getInt("bot.player-quit-message-interval");
+                            if(interval > 0) {
+                                cache.put(e.getPlayer(), true);
+                                plugin.getServer().getScheduler().scheduleDelayedTask(plugin, new AsyncTask() {
+                                    @Override
+                                    public void onRun() {
+                                        cache.remove(e.getPlayer());
+                                    }
+                                },interval * 1000, true);
                             }
                         }
                     }));

@@ -77,7 +77,15 @@ bot:
   # %player% - 玩家显示昵称
   player-join-message: "%player% 进入服务器"
 
+  # 玩家进服消息发送间隔，单位：秒
+  # 在此间隔内多次进入不会多次发送群消息
+  player-join-message-interval: 0
+
   # 退服消息
   # 自带变量：
   # %player% - 玩家显示昵称
   player-quit-message: "%player% 离开服务器"
+
+  # 玩家退服消息发送间隔，单位：秒
+  # 在此间隔内多次退出不会多次发送群消息
+  player-quit-message-interval: 0
