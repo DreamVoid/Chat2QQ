@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: MiraiMC 相关问题
+    url: https://github.com/DreamVoid/MiraiMC/issues
+    about: 如果你正在反馈由 MiraiMC 引发的问题，请前往 MiraiMC 的仓库进行反馈。
+  - name: 社区讨论
+    url: https://github.com/DreamVoid/MiraiMC/discussions
+    about: 不确定你遇到了什么问题？请先在 MiraiMC 讨论区提出。
