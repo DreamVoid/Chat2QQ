@@ -6,6 +6,7 @@ import me.dreamvoid.miraimc.api.MiraiBot;
 import me.dreamvoid.miraimc.internal.httpapi.MiraiHttpAPI;
 import me.dreamvoid.miraimc.internal.httpapi.exception.AbnormalStatusException;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -30,9 +31,10 @@ public class onPlayerMessage implements Listener {
         if(!(plugin.getConfig().getBoolean("general.require-command-to-chat",false))){
             boolean allowWorld = false;
             boolean allowPrefix = false;
+            String message = ChatColor.stripColor(e.getMessage());
             String formatText = plugin.getConfig().getString("bot.group-chat-format")
                     .replace("%player%",e.getPlayer().getName())
-                    .replace("%message%",e.getMessage());
+                    .replace("%message%", message);
 
             // 判断玩家所处世界
             for(String world : plugin.getConfig().getStringList("general.available-worlds")){
@@ -46,7 +48,7 @@ public class onPlayerMessage implements Listener {
             // 判断消息是否带前缀
             if(plugin.getConfig().getBoolean("general.requite-special-word-prefix.enabled",false)){
                 for(String prefix : plugin.getConfig().getStringList("general.requite-special-word-prefix.prefix")){
-                    if(e.getMessage().startsWith(prefix)){
+                    if(message.startsWith(prefix)){
                         allowPrefix = true;
                         formatText = formatText.substring(prefix.length());
                         break;
