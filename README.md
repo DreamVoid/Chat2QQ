@@ -31,4 +31,4 @@ Chat2QQ 是一个基于[MiraiMC](https://github.com/DreamVoid/MiraiMC)的Bukkit�
 | miraimc.command.chat2qq | 允许使用 /chat2qq | OP |
 | miraimc.command.qchat | 允许使用 /qchat | YES |
 | chat2qq.join.silent | 静默加入服务器 | NO |
-| chat2qq.join.quit | 静默退出服务器 | NO |
+| chat2qq.quit.silent | 静默退出服务器 | NO |
