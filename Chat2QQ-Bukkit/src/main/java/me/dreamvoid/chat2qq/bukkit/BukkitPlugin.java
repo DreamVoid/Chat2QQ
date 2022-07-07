@@ -21,6 +21,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.NoSuchElementException;
 
 public class BukkitPlugin extends JavaPlugin implements Listener, CommandExecutor {
@@ -51,6 +52,7 @@ public class BukkitPlugin extends JavaPlugin implements Listener, CommandExecuto
             String playerName;
             boolean allowWorld = false;
             boolean isPlayer = false;
+            boolean inBlackList = false;
             boolean allowConsole = getConfig().getBoolean("general.allow-console-chat", false);
 
             if(sender instanceof Player){
@@ -66,6 +68,8 @@ public class BukkitPlugin extends JavaPlugin implements Listener, CommandExecuto
                 }
                 if(getConfig().getBoolean("general.available-worlds-use-as-blacklist")) allowWorld = !allowWorld;
 
+                inBlackList = getConfig().getStringList("blacklist.player").stream().anyMatch(t -> t.equalsIgnoreCase(playerName));
+
             } else {
                 if(allowConsole){
                     playerName = getConfig().getString("general.console-name", "控制台");
@@ -76,9 +80,12 @@ public class BukkitPlugin extends JavaPlugin implements Listener, CommandExecuto
                 }
             }
 
-            if(allowWorld) {
-                StringBuilder message = new StringBuilder();
-                for(String arg : args){ message.append(arg).append(" "); }
+            StringBuilder message = new StringBuilder();
+            Arrays.stream(args).forEach(arg -> message.append(arg).append(" "));
+            inBlackList = inBlackList || getConfig().getStringList("blacklist.word").stream().anyMatch(t -> message.toString().contains(t));
+
+            // 发送阶段
+            if(allowWorld && !inBlackList) {
                 String formatText = getConfig().getString("bot.group-chat-format")
                         .replace("%player%", playerName)
                         .replace("%message%", message);

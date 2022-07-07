@@ -16,6 +16,7 @@ import me.dreamvoid.miraimc.httpapi.exception.AbnormalStatusException;
 import me.dreamvoid.miraimc.nukkit.utils.MetricsLite;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.NoSuchElementException;
 
 public class NukkitPlugin extends PluginBase {
@@ -42,9 +43,18 @@ public class NukkitPlugin extends PluginBase {
         if(command.getName().equalsIgnoreCase("qchat")){
             String playerName;
             boolean allowConsole = getConfig().getBoolean("general.allow-console-chat", false);
+            boolean inBlackList = false;
 
             if(sender instanceof Player){
                 playerName = ((Player) sender).getDisplayName();
+
+                for(String t : getConfig().getStringList("blacklist.player")){
+                    if (t.equalsIgnoreCase(playerName)) {
+                        inBlackList = true;
+                        break;
+                    }
+                }
+
             } else {
                 if(allowConsole){
                     playerName = getConfig().getString("general.console-name", "控制台");
@@ -54,35 +64,37 @@ public class NukkitPlugin extends PluginBase {
                 }
             }
 
-
             StringBuilder message = new StringBuilder();
-            for(String arg : args){ message.append(arg).append(" "); }
-            String formatText = getConfig().getString("bot.group-chat-format")
-                    .replace("%player%", playerName)
-                    .replace("%message%", message);
-            getServer().getScheduler().scheduleAsyncTask(this, new AsyncTask() {
-                @Override
-                public void onRun() {
-                    getConfig().getLongList("bot.bot-accounts").forEach(bot -> getConfig().getLongList("bot.group-ids").forEach(group -> {
-                        try {
-                            MiraiBot.getBot(bot).getGroup(group).sendMessageMirai(formatText);
-                        } catch (NoSuchElementException e) {
-                            if (MiraiHttpAPI.Bots.containsKey(bot)) {
-                                try {
-                                    MiraiHttpAPI.INSTANCE.sendGroupMessage(MiraiHttpAPI.Bots.get(bot), group, formatText);
-                                } catch (IOException | AbnormalStatusException ex) {
-                                    getLogger().warning("使用" + bot + "发送消息时出现异常，原因: " + ex);
-                                }
-                            } else getLogger().warning("指定的机器人" + bot + "不存在，是否已经登录了机器人？");
-                        }
-                    }));
-                }
-            });
-            sender.sendMessage(TextFormat.colorize('&',"&a已发送QQ群聊天消息！"));
-            if(getConfig().getBoolean("general.command-also-broadcast-to-chat") && sender instanceof Player){
-                ((Player) sender).chat(message.toString());
-            }
+            Arrays.stream(args).forEach(arg -> message.append(arg).append(" "));
+            inBlackList = inBlackList || getConfig().getStringList("blacklist.word").stream().anyMatch(t -> message.toString().contains(t));
 
+            if(!inBlackList){
+                String formatText = getConfig().getString("bot.group-chat-format")
+                        .replace("%player%", playerName)
+                        .replace("%message%", message);
+                getServer().getScheduler().scheduleAsyncTask(this, new AsyncTask() {
+                    @Override
+                    public void onRun() {
+                        getConfig().getLongList("bot.bot-accounts").forEach(bot -> getConfig().getLongList("bot.group-ids").forEach(group -> {
+                            try {
+                                MiraiBot.getBot(bot).getGroup(group).sendMessageMirai(formatText);
+                            } catch (NoSuchElementException e) {
+                                if (MiraiHttpAPI.Bots.containsKey(bot)) {
+                                    try {
+                                        MiraiHttpAPI.INSTANCE.sendGroupMessage(MiraiHttpAPI.Bots.get(bot), group, formatText);
+                                    } catch (IOException | AbnormalStatusException ex) {
+                                        getLogger().warning("使用" + bot + "发送消息时出现异常，原因: " + ex);
+                                    }
+                                } else getLogger().warning("指定的机器人" + bot + "不存在，是否已经登录了机器人？");
+                            }
+                        }));
+                    }
+                });
+                sender.sendMessage(TextFormat.colorize('&', "&a已发送QQ群聊天消息！"));
+                if (getConfig().getBoolean("general.command-also-broadcast-to-chat") && sender instanceof Player) {
+                    ((Player) sender).chat(message.toString());
+                }
+            }
         }
         if(command.getName().equalsIgnoreCase("chat2qq")){
             if(args.length>=1 && args[0].equalsIgnoreCase("reload")){
