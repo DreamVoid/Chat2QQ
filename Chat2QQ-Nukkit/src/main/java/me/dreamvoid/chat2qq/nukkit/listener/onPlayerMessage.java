@@ -7,8 +7,8 @@ import cn.nukkit.event.player.PlayerChatEvent;
 import cn.nukkit.scheduler.AsyncTask;
 import me.dreamvoid.chat2qq.nukkit.NukkitPlugin;
 import me.dreamvoid.miraimc.api.MiraiBot;
-import me.dreamvoid.miraimc.internal.httpapi.MiraiHttpAPI;
-import me.dreamvoid.miraimc.internal.httpapi.exception.AbnormalStatusException;
+import me.dreamvoid.miraimc.httpapi.MiraiHttpAPI;
+import me.dreamvoid.miraimc.httpapi.exception.AbnormalStatusException;
 
 import java.io.IOException;
 import java.util.NoSuchElementException;

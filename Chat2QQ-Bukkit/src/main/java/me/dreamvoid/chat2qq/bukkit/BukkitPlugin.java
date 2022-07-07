@@ -6,9 +6,8 @@ import me.dreamvoid.chat2qq.bukkit.listener.onPlayerJoin;
 import me.dreamvoid.chat2qq.bukkit.listener.onPlayerMessage;
 import me.dreamvoid.chat2qq.bukkit.listener.onPlayerQuit;
 import me.dreamvoid.chat2qq.bukkit.utils.Metrics;
-import me.dreamvoid.miraimc.api.MiraiBot;
-import me.dreamvoid.miraimc.internal.httpapi.MiraiHttpAPI;
-import me.dreamvoid.miraimc.internal.httpapi.exception.AbnormalStatusException;
+import me.dreamvoid.miraimc.httpapi.MiraiHttpAPI;
+import me.dreamvoid.miraimc.httpapi.exception.AbnormalStatusException;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -21,7 +20,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
-import java.util.NoSuchElementException;
 
 public class BukkitPlugin extends JavaPlugin implements Listener, CommandExecutor {
 
