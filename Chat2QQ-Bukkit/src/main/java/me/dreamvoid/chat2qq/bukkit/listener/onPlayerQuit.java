@@ -2,8 +2,8 @@ package me.dreamvoid.chat2qq.bukkit.listener;
 
 import me.dreamvoid.chat2qq.bukkit.BukkitPlugin;
 import me.dreamvoid.miraimc.api.MiraiBot;
-import me.dreamvoid.miraimc.internal.httpapi.MiraiHttpAPI;
-import me.dreamvoid.miraimc.internal.httpapi.exception.AbnormalStatusException;
+import me.dreamvoid.miraimc.httpapi.MiraiHttpAPI;
+import me.dreamvoid.miraimc.httpapi.exception.AbnormalStatusException;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -11,7 +11,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.NoSuchElementException;
 
 public class onPlayerQuit implements Listener {
@@ -19,11 +19,11 @@ public class onPlayerQuit implements Listener {
     public onPlayerQuit(BukkitPlugin plugin){
         this.plugin = plugin;
     }
-    private static HashMap<Player,Boolean> cache = new HashMap<>();
+    private static final ArrayList<Player> cache = new ArrayList<>();
 
     @EventHandler
     public void onPlayerQuitEvent(PlayerQuitEvent e){
-        if(plugin.getConfig().getBoolean("bot.send-player-join-quit-message",false) && !e.getPlayer().hasPermission("chat2qq.quit.silent") && !cache.containsKey(e.getPlayer())){
+        if(plugin.getConfig().getBoolean("bot.send-player-join-quit-message",false) && !e.getPlayer().hasPermission("chat2qq.quit.silent") && !cache.contains(e.getPlayer())){
             new BukkitRunnable() {
                 @Override
                 public void run() {
@@ -40,7 +40,7 @@ public class onPlayerQuit implements Listener {
                         } finally {
                             int interval = plugin.getConfig().getInt("bot.player-quit-message-interval");
                             if(interval > 0) {
-                                cache.put(e.getPlayer(), true);
+                                cache.add(e.getPlayer());
                                 new BukkitRunnable() {
                                     @Override
                                     public void run() {

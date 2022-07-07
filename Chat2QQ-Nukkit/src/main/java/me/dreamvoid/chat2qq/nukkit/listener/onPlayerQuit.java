@@ -7,11 +7,11 @@ import cn.nukkit.event.player.PlayerQuitEvent;
 import cn.nukkit.scheduler.AsyncTask;
 import me.dreamvoid.chat2qq.nukkit.NukkitPlugin;
 import me.dreamvoid.miraimc.api.MiraiBot;
-import me.dreamvoid.miraimc.internal.httpapi.MiraiHttpAPI;
-import me.dreamvoid.miraimc.internal.httpapi.exception.AbnormalStatusException;
+import me.dreamvoid.miraimc.httpapi.MiraiHttpAPI;
+import me.dreamvoid.miraimc.httpapi.exception.AbnormalStatusException;
 
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.NoSuchElementException;
 
 public class onPlayerQuit implements Listener {
@@ -19,11 +19,11 @@ public class onPlayerQuit implements Listener {
     public onPlayerQuit(NukkitPlugin plugin){
         this.plugin = plugin;
     }
-    private static HashMap<Player,Boolean> cache = new HashMap<>();
+    private static final ArrayList<Player> cache = new ArrayList<>();
 
     @EventHandler
     public void onPlayerQuitEvent(PlayerQuitEvent e){
-        if(plugin.getConfig().getBoolean("bot.send-player-join-quit-message",false)&&!e.getPlayer().hasPermission("chat2qq.quit.silent") && !cache.containsKey(e.getPlayer())){
+        if(plugin.getConfig().getBoolean("bot.send-player-join-quit-message",false)&&!e.getPlayer().hasPermission("chat2qq.quit.silent") && !cache.contains(e.getPlayer())){
             plugin.getServer().getScheduler().scheduleAsyncTask(plugin, new AsyncTask() {
                 @Override
                 public void onRun() {
@@ -40,7 +40,7 @@ public class onPlayerQuit implements Listener {
                         } finally {
                             int interval = plugin.getConfig().getInt("bot.player-quit-message-interval");
                             if(interval > 0) {
-                                cache.put(e.getPlayer(), true);
+                                cache.add(e.getPlayer());
                                 plugin.getServer().getScheduler().scheduleDelayedTask(plugin, new AsyncTask() {
                                     @Override
                                     public void onRun() {
