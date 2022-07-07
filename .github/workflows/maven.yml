@@ -1,0 +1,46 @@
+# This workflow will build a Java project with Maven
+# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
+
+name: Java CI with Maven
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up JDK 8
+      uses: actions/setup-java@v2
+      with:
+        java-version: '8'
+        distribution: 'zulu'
+    - name: Build with Maven
+      run: mvn -B package --file pom.xml
+
+    # Chat2QQ-Bukkit.jar
+    - name: Upload a Build Artifact - Chat2QQ Bukkit
+      uses: actions/upload-artifact@v2.3.1
+      with:
+        name: "Chat2QQ-Bukkit.jar"
+        path: Chat2QQ-Bukkit/target/Chat2QQ-Bukkit.jar
+
+    # Chat2QQ-Bungee.jar
+    - name: Upload a Build Artifact - Chat2QQ Bungee
+      uses: actions/upload-artifact@v2.3.1
+      with:
+        name: "Chat2QQ-Bungee.jar"
+        path: Chat2QQ-Bungee/target/Chat2QQ-Bungee.jar
+
+    # Chat2QQ-Nukkit.jar
+    - name: Upload a Build Artifact - Chat2QQ Nukkit
+      uses: actions/upload-artifact@v2.3.1
+      with:
+        name: "Chat2QQ-Nukkit.jar"
+        path: Chat2QQ-Nukkit/target/Chat2QQ-Nukkit.jar
+
