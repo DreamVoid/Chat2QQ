@@ -1,8 +1,9 @@
 package me.dreamvoid.chat2qq.bungee.commands;
 
 import me.dreamvoid.chat2qq.bungee.BungeePlugin;
-import me.dreamvoid.miraimc.internal.httpapi.MiraiHttpAPI;
-import me.dreamvoid.miraimc.internal.httpapi.exception.AbnormalStatusException;
+import me.dreamvoid.miraimc.api.MiraiBot;
+import me.dreamvoid.miraimc.httpapi.MiraiHttpAPI;
+import me.dreamvoid.miraimc.httpapi.exception.AbnormalStatusException;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -22,34 +23,32 @@ public class qchat extends Command {
     @Override
     public void execute(CommandSender sender, String[] args) {
         String playerName;
-        boolean allowWorld = false;
-        boolean isPlayer = false;
+        boolean allowServer = false;
         boolean allowConsole = plugin.getConfig().getBoolean("general.allow-console-chat", false);
 
         if(sender instanceof ProxiedPlayer){
-            isPlayer = true;
             ProxiedPlayer player = (ProxiedPlayer) sender;
             playerName = player.getDisplayName();
             // 判断玩家所处世界
             for(String server : plugin.getConfig().getStringList("general.available-servers")){
                 if(player.getServer().getInfo().getName().equalsIgnoreCase(server)){
-                    allowWorld = true;
+                    allowServer = true;
                     break;
                 }
             }
-            if(plugin.getConfig().getBoolean("general.available-servers-use-as-blacklist")) allowWorld = !allowWorld;
+            if(plugin.getConfig().getBoolean("general.available-servers-use-as-blacklist")) allowServer = !allowServer;
 
         } else {
             if(allowConsole){
                 playerName = plugin.getConfig().getString("general.console-name", "控制台");
-                allowWorld = true;
+                allowServer = true;
             } else {
                 sender.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&',"&c控制台不能执行此命令！")));
                 return;
             }
         }
 
-        if(allowWorld) {
+        if(allowServer) {
             StringBuilder message = new StringBuilder();
             for(String arg : args){ message.append(arg).append(" "); }
             String formatText = plugin.getConfig().getString("bot.group-chat-format")
