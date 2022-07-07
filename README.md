@@ -5,11 +5,14 @@
 Chat2QQ 是一个基于[MiraiMC](https://github.com/DreamVoid/MiraiMC)的插件，能够让你在Minecraft服务器上与QQ群的玩家聊天，也能在QQ群上与Minecraft服务器的玩家聊天。
 
 ## 下载
-* [Github 发布页](https://github.com/DreamVoid/Chat2QQ/releases)
-* [Gitee 发布页](https://gitee.com/dreamvoid/Chat2QQ/releases) (中国)
-* [MCBBS](https://www.mcbbs.net/thread-1231009-1-1.html) (中国)
-  * [MCBBS V4](https://beta.mcbbs.net/resource/servermod/5ttwt4nm) (中国)
-  * [基岩版](https://www.mcbbs.net/thread-1260492-1-1.html) (中国)
+* 稳定版本
+  * [Github 发布页](https://github.com/DreamVoid/Chat2QQ/releases)
+  * [Gitee 发布页](https://gitee.com/dreamvoid/Chat2QQ/releases) (中国)
+  * [MCBBS](https://www.mcbbs.net/thread-1231009-1-1.html) (中国)
+    * [MCBBS V4](https://beta.mcbbs.net/resource/servermod/5ttwt4nm) (中国)
+    * [基岩版](https://www.mcbbs.net/thread-1260492-1-1.html) (中国)
+* 开发版本
+    * [GitHub Actions CI](https://github.com/DreamVoid/Chat2QQ/actions/workflows/maven.yml?query=is%3Asuccess)
 
 ## 开始使用
 * 下载插件，并将插件文件放入plugins文件夹
