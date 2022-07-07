@@ -26,6 +26,7 @@ public class qchat extends Command {
         String playerName;
         boolean allowServer = false;
         boolean allowConsole = plugin.getConfig().getBoolean("general.allow-console-chat", false);
+        boolean inBlackList = false;
 
         if(sender instanceof ProxiedPlayer){
             ProxiedPlayer player = (ProxiedPlayer) sender;
@@ -39,6 +40,13 @@ public class qchat extends Command {
             }
             if(plugin.getConfig().getBoolean("general.available-servers-use-as-blacklist")) allowServer = !allowServer;
 
+            for(String t : plugin.getConfig().getStringList("blacklist.player")){
+                if (t.equalsIgnoreCase(playerName)) {
+                    inBlackList = true;
+                    break;
+                }
+            }
+
         } else {
             if(allowConsole){
                 playerName = plugin.getConfig().getString("general.console-name", "控制台");
@@ -49,12 +57,20 @@ public class qchat extends Command {
             }
         }
 
-        if(allowServer) {
-            StringBuilder message = new StringBuilder();
-            for(String arg : args){ message.append(arg).append(" "); }
-            String formatText = plugin.getConfig().getString("bot.group-chat-format")
-                    .replace("%player%", playerName)
-                    .replace("%message%", message);
+        StringBuilder message = new StringBuilder();
+        for(String arg : args){ message.append(arg).append(" "); }
+        String formatText = plugin.getConfig().getString("bot.group-chat-format")
+                .replace("%player%", playerName)
+                .replace("%message%", message);
+
+        for(String t : plugin.getConfig().getStringList("blacklist.word")){
+            if (message.toString().contains(t)) {
+                inBlackList = true;
+                break;
+            }
+        }
+
+        if(allowServer && !inBlackList) {
             plugin.getProxy().getScheduler().runAsync(plugin, () -> plugin.getConfig().getLongList("bot.bot-accounts").forEach(bot -> plugin.getConfig().getLongList("bot.group-ids").forEach(group -> {
                 try {
                     MiraiBot.getBot(bot).getGroup(group).sendMessageMirai(formatText);
