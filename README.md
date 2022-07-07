@@ -22,15 +22,15 @@ Chat2QQ 是一个基于[MiraiMC](https://github.com/DreamVoid/MiraiMC)的插件�
 
 ## 指令和权限
 ### 指令
-| 命令 | 描述 | 权限 |
-| ---------------------------- | ---------------------- | ---------- |
-| /chat2qq reload  | 重新加载插件配置 | miraimc.command.chat2qq |
-| /qchat <消息> | 向QQ群发送聊天消息 | miraimc.command.qchat |
+| 命令              | 描述         | 权限                      |
+|-----------------|------------|-------------------------|
+| /chat2qq reload | 重新加载插件配置   | miraimc.command.chat2qq |
+| /qchat <消息>     | 向QQ群发送聊天消息 | miraimc.command.qchat   |
 
 ### 权限
-| 权限节点 | 描述 | 默认 |
-| ---------------------------- | ---------------------- | ---------- |
-| miraimc.command.chat2qq | 允许使用 /chat2qq | OP |
-| miraimc.command.qchat | 允许使用 /qchat | YES |
-| chat2qq.join.silent | 静默加入服务器 | NO |
-| chat2qq.quit.silent | 静默退出服务器 | NO |
+| 权限节点                    | 描述            | 默认  |
+|-------------------------|---------------|-----|
+| miraimc.command.chat2qq | 允许使用 /chat2qq | OP  |
+| miraimc.command.qchat   | 允许使用 /qchat   | YES |
+| chat2qq.join.silent     | 静默加入服务器       | NO  |
+| chat2qq.quit.silent     | 静默退出服务器       | NO  |
