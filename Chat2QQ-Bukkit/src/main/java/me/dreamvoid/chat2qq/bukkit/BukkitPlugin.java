@@ -6,6 +6,7 @@ import me.dreamvoid.chat2qq.bukkit.listener.onPlayerJoin;
 import me.dreamvoid.chat2qq.bukkit.listener.onPlayerMessage;
 import me.dreamvoid.chat2qq.bukkit.listener.onPlayerQuit;
 import me.dreamvoid.chat2qq.bukkit.utils.Metrics;
+import me.dreamvoid.miraimc.api.MiraiBot;
 import me.dreamvoid.miraimc.httpapi.MiraiHttpAPI;
 import me.dreamvoid.miraimc.httpapi.exception.AbnormalStatusException;
 import org.bukkit.Bukkit;
@@ -20,6 +21,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
+import java.util.NoSuchElementException;
 
 public class BukkitPlugin extends JavaPlugin implements Listener, CommandExecutor {
 
@@ -89,9 +91,15 @@ public class BukkitPlugin extends JavaPlugin implements Listener, CommandExecuto
                     public void run() {
                         getConfig().getLongList("bot.bot-accounts").forEach(bot -> getConfig().getLongList("bot.group-ids").forEach(group -> {
                             try {
-                                MiraiHttpAPI.INSTANCE.sendGroupMessage(MiraiHttpAPI.Bots.get(bot), group, finalFormatText);
-                            } catch (IOException | AbnormalStatusException ex) {
-                                getLogger().warning("使用" + bot + "发送消息时出现异常，原因: " + ex);
+                                MiraiBot.getBot(bot).getGroup(group).sendMessageMirai(finalFormatText);
+                            } catch (NoSuchElementException e) {
+                                if (MiraiHttpAPI.Bots.containsKey(bot)) {
+                                    try {
+                                        MiraiHttpAPI.INSTANCE.sendGroupMessage(MiraiHttpAPI.Bots.get(bot), group, finalFormatText);
+                                    } catch (IOException | AbnormalStatusException ex) {
+                                        getLogger().warning("使用" + bot + "发送消息时出现异常，原因: " + ex);
+                                    }
+                                } else getLogger().warning("指定的机器人" + bot + "不存在，是否已经登录了机器人？");
                             }
                         }));
                     }
