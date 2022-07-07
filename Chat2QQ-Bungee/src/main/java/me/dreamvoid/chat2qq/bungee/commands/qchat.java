@@ -11,6 +11,7 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
 
 import java.io.IOException;
+import java.util.NoSuchElementException;
 
 public class qchat extends Command {
     private final BungeePlugin plugin;
@@ -56,9 +57,15 @@ public class qchat extends Command {
                     .replace("%message%", message);
             plugin.getProxy().getScheduler().runAsync(plugin, () -> plugin.getConfig().getLongList("bot.bot-accounts").forEach(bot -> plugin.getConfig().getLongList("bot.group-ids").forEach(group -> {
                 try {
-                    MiraiHttpAPI.INSTANCE.sendGroupMessage(MiraiHttpAPI.Bots.get(bot), group, formatText);
-                } catch (IOException | AbnormalStatusException ex) {
-                    plugin.getLogger().warning("使用" + bot + "发送消息时出现异常，原因: " + ex);
+                    MiraiBot.getBot(bot).getGroup(group).sendMessageMirai(formatText);
+                } catch (NoSuchElementException e) {
+                    if (MiraiHttpAPI.Bots.containsKey(bot)) {
+                        try {
+                            MiraiHttpAPI.INSTANCE.sendGroupMessage(MiraiHttpAPI.Bots.get(bot), group, formatText);
+                        } catch (IOException | AbnormalStatusException ex) {
+                            plugin.getLogger().warning("使用" + bot + "发送消息时出现异常，原因: " + ex);
+                        }
+                    } else plugin.getLogger().warning("指定的机器人" + bot + "不存在，是否已经登录了机器人？");
                 }
             })));
             sender.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&',"&a已发送QQ群聊天消息！")));
