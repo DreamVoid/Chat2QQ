@@ -6,13 +6,12 @@ import cn.nukkit.command.CommandSender;
 import cn.nukkit.plugin.PluginBase;
 import cn.nukkit.scheduler.AsyncTask;
 import cn.nukkit.utils.TextFormat;
-import me.dreamvoid.chat2qq.nukkit.listener.onPlayerMessage;
-import me.dreamvoid.chat2qq.nukkit.listener.onPlayerQuit;
 import me.dreamvoid.chat2qq.nukkit.listener.onGroupMessage;
 import me.dreamvoid.chat2qq.nukkit.listener.onPlayerJoin;
-import me.dreamvoid.miraimc.api.MiraiBot;
-import me.dreamvoid.miraimc.internal.httpapi.MiraiHttpAPI;
-import me.dreamvoid.miraimc.internal.httpapi.exception.AbnormalStatusException;
+import me.dreamvoid.chat2qq.nukkit.listener.onPlayerMessage;
+import me.dreamvoid.chat2qq.nukkit.listener.onPlayerQuit;
+import me.dreamvoid.miraimc.httpapi.MiraiHttpAPI;
+import me.dreamvoid.miraimc.httpapi.exception.AbnormalStatusException;
 import me.dreamvoid.miraimc.nukkit.utils.MetricsLite;
 
 import java.io.IOException;
@@ -34,11 +33,6 @@ public class NukkitPlugin extends PluginBase {
             int pluginId = 12765;
             new MetricsLite(this, pluginId);
         }
-    }
-
-    @Override
-    public void onDisable() {
-        super.onDisable();
     }
 
     @Override
