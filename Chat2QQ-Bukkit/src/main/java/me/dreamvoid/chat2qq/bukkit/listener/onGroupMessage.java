@@ -43,7 +43,7 @@ public class onGroupMessage implements Listener {
 
         // cleanup-name
         String $regex_nick = "%regex_nick%";
-        if(plugin.getConfig().getBoolean("general.cleanup-name.enabled",true)){
+        if(plugin.getConfig().getBoolean("general.cleanup-name.enabled",false)){
             Matcher matcher = Pattern.compile(plugin.getConfig().getString("general.cleanup-name.regex")).matcher(name);
             if(matcher.find()){
                 $regex_nick = matcher.group(1);
