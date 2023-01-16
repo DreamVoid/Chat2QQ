@@ -8,6 +8,9 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class onGroupMessage implements Listener {
     private final BungeePlugin plugin;
     public onGroupMessage(BungeePlugin plugin){
@@ -36,12 +39,30 @@ public class onGroupMessage implements Listener {
             }
         } else allowPrefix = true;
 
+        // cleanup-name
+        String $regex_nick = "%regex_nick%";
+        if(plugin.getConfig().getBoolean("general.cleanup-name.enabled",false)){
+            Matcher matcher = Pattern.compile(plugin.getConfig().getString("general.cleanup-name.regex")).matcher(name);
+            if(matcher.find()){
+                $regex_nick = matcher.group(1);
+            } else {
+                $regex_nick = plugin.getConfig().getString("general.cleanup-name.not-captured")
+                        .replace("%groupname%",e.getGroupName())
+                        .replace("%groupid%",String.valueOf(e.getGroupID()))
+                        .replace("%nick%",name)
+//                        .replace("%regex_nick%", "%regex_nick%")
+                        .replace("%qq%",String.valueOf(e.getSenderID()))
+                        .replace("%message%", message);
+            }
+        }
+
         String formatText;
         if(plugin.getConfig().getBoolean("general.use-miraimc-bind",true) && MiraiMC.getBind(e.getSenderID()) != null){
             formatText = plugin.getConfig().getString("general.bind-chat-format")
                     .replace("%groupname%",e.getGroupName())
                     .replace("%groupid%",String.valueOf(e.getGroupID()))
                     .replace("%nick%",name)
+                    .replace("%regex_nick%", $regex_nick)
                     .replace("%qq%",String.valueOf(e.getSenderID()))
                     .replace("%message%", message)
                     .replace("%player%",plugin.getProxy().getPlayer(MiraiMC.getBind(e.getSenderID())).getDisplayName());
@@ -50,6 +71,7 @@ public class onGroupMessage implements Listener {
                     .replace("%groupname%",e.getGroupName())
                     .replace("%groupid%",String.valueOf(e.getGroupID()))
                     .replace("%nick%",name)
+                    .replace("%regex_nick%", $regex_nick)
                     .replace("%qq%",String.valueOf(e.getSenderID()))
                     .replace("%message%", message);
         }
