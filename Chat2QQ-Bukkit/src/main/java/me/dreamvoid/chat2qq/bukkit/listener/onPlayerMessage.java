@@ -32,9 +32,6 @@ public class onPlayerMessage implements Listener {
             boolean allowWorld = false;
             boolean allowPrefix = false;
             String message = ChatColor.stripColor(e.getMessage());
-            String formatText = plugin.getConfig().getString("bot.group-chat-format")
-                    .replace("%player%",e.getPlayer().getName())
-                    .replace("%message%", message);
 
             // 判断玩家所处世界
             for(String world : plugin.getConfig().getStringList("general.available-worlds")){
@@ -50,11 +47,16 @@ public class onPlayerMessage implements Listener {
                 for(String prefix : plugin.getConfig().getStringList("general.requite-special-word-prefix.prefix")){
                     if(message.startsWith(prefix)){
                         allowPrefix = true;
-                        formatText = formatText.substring(prefix.length());
+                        message = message.substring(prefix.length());
                         break;
                     }
                 }
             } else allowPrefix = true;
+
+            // 服务器消息发送到QQ群的格式
+            String formatText = plugin.getConfig().getString("bot.group-chat-format")
+                    .replace("%player%",e.getPlayer().getName())
+                    .replace("%message%", message);
 
             if(allowWorld && allowPrefix){
                 if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI")!=null){
