@@ -9,6 +9,10 @@ import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
+import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class onGroupMessage implements Listener {
     private final BukkitPlugin plugin;
     public onGroupMessage(BukkitPlugin plugin){
@@ -37,23 +41,46 @@ public class onGroupMessage implements Listener {
             }
         } else allowPrefix = true;
 
+        // cleanup-name
+        String $regex_nick = "%regex_nick%";
+        if(plugin.getConfig().getBoolean("general.cleanup-name.enabled",true)){
+            Matcher matcher = Pattern.compile(plugin.getConfig().getString("general.cleanup-name.regex")).matcher(name);
+            if(matcher.find()){
+                $regex_nick = matcher.group(1);
+            } else {
+                $regex_nick = plugin.getConfig().getString("general.cleanup-name.not-captured")
+                        .replace("%groupname%",e.getGroupName())
+                        .replace("%groupid%",String.valueOf(e.getGroupID()))
+                        .replace("%nick%",name)
+//                        .replace("%regex_nick%", "%regex_nick%")
+                        .replace("%qq%",String.valueOf(e.getSenderID()))
+                        .replace("%message%", message);
+            }
+        }
+
         String formatText;
         if(plugin.getConfig().getBoolean("general.use-miraimc-bind",true) && MiraiMC.getBind(e.getSenderID()) != null){
             formatText = plugin.getConfig().getString("general.bind-chat-format")
                     .replace("%groupname%",e.getGroupName())
                     .replace("%groupid%",String.valueOf(e.getGroupID()))
                     .replace("%nick%",name)
+                    .replace("%regex_nick%", $regex_nick)
                     .replace("%qq%",String.valueOf(e.getSenderID()))
                     .replace("%message%", message);
             if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null){
                 formatText = PlaceholderAPI.setPlaceholders(Bukkit.getOfflinePlayer(MiraiMC.getBind(e.getSenderID())), formatText);
             }
-        } else formatText = plugin.getConfig().getString("general.in-game-chat-format")
+        } else {
+            formatText = plugin.getConfig().getString("general.in-game-chat-format")
                     .replace("%groupname%",e.getGroupName())
                     .replace("%groupid%",String.valueOf(e.getGroupID()))
                     .replace("%nick%",name)
+                    .replace("%regex_nick%", $regex_nick)
                     .replace("%qq%",String.valueOf(e.getSenderID()))
                     .replace("%message%", message);
+        }
+
+
 
         if(plugin.getConfig().getLongList("bot.bot-accounts").contains(e.getBotID()) && plugin.getConfig().getLongList("bot.group-ids").contains(e.getGroupID()) && allowPrefix){
             Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&',formatText));
