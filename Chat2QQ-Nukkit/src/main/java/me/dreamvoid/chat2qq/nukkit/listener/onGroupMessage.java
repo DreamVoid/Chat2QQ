@@ -8,6 +8,9 @@ import me.dreamvoid.miraimc.api.MiraiBot;
 import me.dreamvoid.miraimc.api.MiraiMC;
 import me.dreamvoid.miraimc.nukkit.event.message.passive.MiraiGroupMessageEvent;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class onGroupMessage implements Listener {
     private final NukkitPlugin plugin;
     public onGroupMessage(NukkitPlugin plugin){
@@ -36,18 +39,37 @@ public class onGroupMessage implements Listener {
             }
         } else allowPrefix = true;
 
+        // cleanup-name
+        String $regex_nick = "%regex_nick%";
+        if(plugin.getConfig().getBoolean("general.cleanup-name.enabled",false)){
+            Matcher matcher = Pattern.compile(plugin.getConfig().getString("general.cleanup-name.regex")).matcher(name);
+            if(matcher.find()){
+                $regex_nick = matcher.group(1);
+            } else {
+                $regex_nick = plugin.getConfig().getString("general.cleanup-name.not-captured")
+                        .replace("%groupname%",e.getGroupName())
+                        .replace("%groupid%",String.valueOf(e.getGroupID()))
+                        .replace("%nick%",name)
+//                        .replace("%regex_nick%", "%regex_nick%")
+                        .replace("%qq%",String.valueOf(e.getSenderID()))
+                        .replace("%message%", message);
+            }
+        }
+
         String formatText;
         if(plugin.getConfig().getBoolean("general.use-miraimc-bind",true) && MiraiMC.getBind(e.getSenderID()) != null){
             formatText = plugin.getConfig().getString("general.bind-chat-format")
                     .replace("%groupname%",e.getGroupName())
                     .replace("%groupid%",String.valueOf(e.getGroupID()))
                     .replace("%nick%",name)
+                    .replace("%regex_nick%", $regex_nick)
                     .replace("%qq%",String.valueOf(e.getSenderID()))
                     .replace("%message%", message);
         } else formatText = plugin.getConfig().getString("general.in-game-chat-format")
                     .replace("%groupname%",e.getGroupName())
                     .replace("%groupid%",String.valueOf(e.getGroupID()))
                     .replace("%nick%",name)
+                    .replace("%regex_nick%", $regex_nick)
                     .replace("%qq%",String.valueOf(e.getSenderID()))
                     .replace("%message%", message);
 
