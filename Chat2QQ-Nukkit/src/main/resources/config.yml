@@ -10,11 +10,22 @@ general:
   # 使用命令时是否同时向服务器内发送聊天消息
   command-also-broadcast-to-chat: true
 
+  # 从 群名片(%nick%) 中匹配 MC 可用的游戏名称
+  # 添加变量: %regex_nick% - 使用正则匹配到的名称, 需要开启 cleanup-name 功能
+  cleanup-name:
+    # 不使用时请关闭
+    enabled: false
+    # 程序取第一个捕获组的结果
+    regex: "([a-zA-Z0-9_]{3,16})"
+    # 如果匹配不到, 则使用 %nick%, 也可以替换为其他 %regex_nick% 以外的变量或字符串
+    not-captured: "%nick%"
+
   # QQ群消息广播到游戏内聊天的格式（可以使用样式代码）
   # 变量：
   # %groupname% - 群名称
   # %groupid% - 群号
   # %nick% - 发送者群名片
+  # %regex_nick% - 使用正则匹配到的名称, 需要开启 cleanup-name 功能
   # %qq% - 发送者QQ号
   # %message% - 消息内容
   in-game-chat-format: "&6[%groupname%/%groupid%] &a%nick%(%qq%)&r: %message%"
