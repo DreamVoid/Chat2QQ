@@ -20,6 +20,39 @@ general:
     # 如果匹配不到, 则使用 %nick%, 也可以替换为其他 %regex_nick% 以外的变量或字符串
     not-captured: "%nick%"
 
+  # 预处理 %message% 中的消息
+  pretreatment:
+    # 不使用时请关闭
+    enabled: false
+    # **使用方法**
+    # list:
+    #   - 匹配方式: prefix (前缀匹配), 可用处理方式: to_all
+    #                                           to_replace
+    #             contain (包含), 可用处理方式: to_all
+    #                                        to_replace
+    #             regular (正则匹配), 可用处理方式: to_all
+    #                                           to_regular
+    #     处理方式: to_all (替换整条消息)
+    #             to_replace (替换匹配到的部分)
+    #             to_regular (使用正则替换, 可使用正则变量)
+    #
+    #     是否发送: send (填写 send 配置将取消转发送匹配到的消息, 不需要时请忽略)
+    #
+    # > 正则的性能较差, 请尽量避免使用很多正则
+    # 示例配置, 默认配置了一些可能有用的功能:
+    list:
+
+      # 简单的匹配卡片消息
+      - prefix: '{"app":"com.tencent.'
+        to_all: "[卡片消息]"
+
+#      # 更好的匹配卡片消息, 使用正则解析内容
+#      - regular: '\{"app":"com.tencent.miniapp(?:.*)"prompt":"(?:.*?)](.*?)","(?:.*)"desc":"(.*?)","(?:.*)' # miniApp
+#        to_regular: "[小程序: $1] $2" # [小程序: 哔哩哔哩] xxxxxxx
+#
+#      - regular: '\{"app":"com.tencent.structmsg(?:.*)"tag":"(.*?)","title":"(.*?)","(?:.*)' # structMsg
+#        to_regular: "[卡片消息: $1] $2" # [卡片消息: 哔哩哔哩] xxxxxxx
+
   # QQ群消息广播到游戏内聊天的格式（可以使用样式代码）
   # 变量：
   # %groupname% - 群名称
