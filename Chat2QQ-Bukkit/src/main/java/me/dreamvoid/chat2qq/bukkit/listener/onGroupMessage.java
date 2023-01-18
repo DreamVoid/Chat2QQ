@@ -76,7 +76,7 @@ public class onGroupMessage implements Listener {
                 }
 
                 // 包含
-                else if(config.get("contain") != null && message.contains((String) config.get("prefix"))){
+                else if(config.get("contain") != null && message.contains((String) config.get("contain"))){
                     if(config.get("send") != null){
                         return;
                     }
