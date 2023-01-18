@@ -38,6 +38,7 @@ general:
     #                                           to_replace
     #             contain (包含), 可用处理方式: to_all
     #                                        to_replace
+    #             equal (完全相等), 可用处理方式: to_all
     #             regular (正则匹配), 可用处理方式: to_all
     #                                           to_regular
     #     处理方式: to_all (替换整条消息)

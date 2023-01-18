@@ -9,6 +9,7 @@ import me.dreamvoid.miraimc.api.MiraiMC;
 import me.dreamvoid.miraimc.nukkit.event.message.passive.MiraiGroupMessageEvent;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -80,6 +81,16 @@ public class onGroupMessage implements Listener {
                     }
                     else if(config.get("to_replace") != null){
                         message = message.replace((String) config.get("contain"), (String) config.get("to_replace"));
+                    }
+                    else if(config.get("to_all") != null){
+                        message = (String) config.get("to_all");
+                    }
+                }
+
+                // 相等
+                else if(config.get("equal") != null && Objects.equals(message, config.get("equal"))){
+                    if(config.get("send") != null){
+                        return;
                     }
                     else if(config.get("to_all") != null){
                         message = (String) config.get("to_all");

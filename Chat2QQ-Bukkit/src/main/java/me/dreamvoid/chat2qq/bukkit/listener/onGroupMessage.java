@@ -88,6 +88,16 @@ public class onGroupMessage implements Listener {
                     }
                 }
 
+                // 相等
+                else if(config.get("equal") != null && Objects.equals(message, config.get("equal"))){
+                    if(config.get("send") != null){
+                        return;
+                    }
+                    else if(config.get("to_all") != null){
+                        message = (String) config.get("to_all");
+                    }
+                }
+
                 // 正则匹配
                 else if(config.get("regular") != null && Pattern.compile((String) config.get("regular")).matcher(message).find()){
                     if(config.get("send") != null){
