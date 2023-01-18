@@ -2,15 +2,19 @@ package me.dreamvoid.chat2qq.bukkit.listener;
 
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.dreamvoid.chat2qq.bukkit.BukkitPlugin;
+import me.dreamvoid.miraimc.api.MiraiBot;
 import me.dreamvoid.miraimc.api.MiraiMC;
 import me.dreamvoid.miraimc.bukkit.event.message.passive.MiraiGroupMessageEvent;
+import me.dreamvoid.miraimc.httpapi.MiraiHttpAPI;
+import me.dreamvoid.miraimc.httpapi.exception.AbnormalStatusException;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
-import java.util.Map;
-import java.util.Objects;
+import java.io.IOException;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -21,7 +25,7 @@ public class onGroupMessage implements Listener {
     }
 
     @EventHandler
-    public void onGroupMessageReceive(MiraiGroupMessageEvent e){
+    public void onGroupMessageReceive(MiraiGroupMessageEvent e) throws InterruptedException {
         if(plugin.getConfig().getStringList("blacklist.word").stream().anyMatch(s -> e.getMessage().contains(s)) || plugin.getConfig().getLongList("blacklist.qq").contains(e.getSenderID())) return;
 
         String name = e.getSenderNameCard();
@@ -41,6 +45,69 @@ public class onGroupMessage implements Listener {
                 }
             }
         } else allowPrefix = true;
+
+        // 运行指令
+        //
+        if(plugin.getConfig().getBoolean("general.run-command.enabled",false) &&
+                plugin.getConfig().getLongList("general.run-command.qq-group").contains(e.getGroupID())){
+            // 前缀匹配
+            if(message.startsWith(plugin.getConfig().getString("general.run-command.prefix", "/"))){
+                String command = message.substring(plugin.getConfig().getString("general.run-command.prefix", "/").length());
+                // 长度限制
+                if(command.length() <= plugin.getConfig().getInt("general.run-command.command-max-length", 255)){
+                    // 在用户组中查找指令
+                    String permission = e.getSenderPermission() == 0 ? "MEMBER" :
+                                        e.getSenderPermission() == 1 ? "ADMINISTRATOR" :
+                                        e.getSenderPermission() == 2 ? "OWNER" : "MEMBER";
+                    // System.out.println(permission);
+                    for(String whiteListCommand : plugin.getConfig().getStringList("general.run-command.group."+ permission)){
+                        if(command.startsWith(whiteListCommand)){
+                            // 执行指令
+                            if(plugin.getConfig().getBoolean("general.run-command.return",true)){
+                                System.out.println("[Chat2QQ] "+ e.getGroupID() +"."+ e.getSenderID() + "运行指令: /"+ command);
+
+                                Commander Sender = new Commander();
+                                Bukkit.getScheduler().callSyncMethod(plugin, () -> Bukkit.dispatchCommand(Sender, command));
+
+                                // 等待指令运行
+                                Thread.sleep(plugin.getConfig().getInt("general.qq-groupx.sleep", 500));
+
+                                // 消息处理
+                                StringBuilder text = new StringBuilder();
+                                if(Sender.message.size() == 1){
+                                    text = Optional.ofNullable(Sender.message.get(0)).map(StringBuilder::new).orElse(null);
+                                }else if(Sender.message.size() > 1){
+                                    for(String m : Sender.message){
+                                        text.append(m).append("\n");
+                                    }
+                                }else{
+                                    text = new StringBuilder(plugin.getConfig().getString("general.run-command.message-no-out","message-no-out"));
+                                }
+                                System.out.println(text);
+                                // 处理彩色字符
+                                String finalText = String.valueOf(text).replaceAll("§[a-z0-9]", "");
+
+                                // 发送消息
+                                MiraiBot.getBot(plugin.getConfig().getLongList("bot.bot-accounts").get(0))
+                                        .getGroup(e.getGroupID())
+                                        .sendMessageMirai(String.valueOf(finalText));
+
+                            } else {
+                                Bukkit.dispatchCommand(Bukkit.getServer().getConsoleSender(), command);
+
+                                // 发送消息
+                                MiraiBot.getBot(plugin.getConfig().getLongList("bot.bot-accounts").get(0))
+                                        .getGroup(e.getGroupID())
+                                        .sendMessageMirai(plugin.getConfig().getString("general.run-command.message-no-out","message-no-out"));
+                            }
+
+                            return;
+                        }
+                    }
+
+                }
+            }
+        }
 
         // cleanup-name
         String $regex_nick = "%regex_nick%";

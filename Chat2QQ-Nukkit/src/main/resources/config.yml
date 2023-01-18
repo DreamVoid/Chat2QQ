@@ -10,6 +10,9 @@ general:
   # 使用命令时是否同时向服务器内发送聊天消息
   command-also-broadcast-to-chat: true
 
+
+
+
   # 从 群名片(%nick%) 中匹配 MC 可用的游戏名称
   # 添加变量: %regex_nick% - 使用正则匹配到的名称, 需要开启 cleanup-name 功能
   cleanup-name:
