@@ -96,9 +96,6 @@ public class onGroupMessage implements Listener {
                     else if(config.get("to_regular") != null){
                         message = message.replaceAll((String) config.get("regular"), (String) config.get("to_regular"));
                     }
-                    else if(config.get("to_replace") != null){
-
-                    }
                     else if(config.get("to_all") != null){
                         message = (String) config.get("to_all");
                     }
