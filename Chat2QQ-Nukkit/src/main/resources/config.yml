@@ -47,6 +47,10 @@ general:
       - prefix: '{"app":"com.tencent.'
         to_all: "[卡片消息]"
 
+#      # 取消发送包含此内容的消息
+#      - contain: '此内容'
+#        send: false
+
 #      # 更好的匹配卡片消息, 使用正则解析内容
 #      - regular: '\{"app":"com.tencent.miniapp(?:.*)"prompt":"(?:.*?)](.*?)","(?:.*)"desc":"(.*?)","(?:.*)' # miniApp
 #        to_regular: "[小程序: $1] $2" # [小程序: 哔哩哔哩] xxxxxxx
