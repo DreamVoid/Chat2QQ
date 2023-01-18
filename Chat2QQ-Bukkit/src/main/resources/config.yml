@@ -22,7 +22,7 @@ general:
   run-command:
     # 不使用时请关闭
     enabled: false
-    # 启用此功能的QQ群
+    # 启用此功能的QQ群, 需要同时设置在 bot.group-ids
     qq-group:
       - 1000001
     # 指令前缀, 可以是多个字符, 比如 "~$"
@@ -37,6 +37,7 @@ general:
     message-no-out: "运行无返回指令"
     # 设置各组可执行的指令
     # 消息以设定的指令开头则作为指令运行, 因此可以精确到指令参数
+    # 权限更高的用户将可以使用更低的用户的指令
     group:
       OWNER: # 群主
         - 指令

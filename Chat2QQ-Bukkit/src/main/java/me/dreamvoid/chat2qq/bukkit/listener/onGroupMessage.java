@@ -56,55 +56,20 @@ public class onGroupMessage implements Listener {
                 // 长度限制
                 if(command.length() <= plugin.getConfig().getInt("general.run-command.command-max-length", 255)){
                     // 在用户组中查找指令
-                    String permission = e.getSenderPermission() == 0 ? "MEMBER" :
-                                        e.getSenderPermission() == 1 ? "ADMINISTRATOR" :
-                                        e.getSenderPermission() == 2 ? "OWNER" : "MEMBER";
-                    // System.out.println(permission);
-                    for(String whiteListCommand : plugin.getConfig().getStringList("general.run-command.group."+ permission)){
-                        if(command.startsWith(whiteListCommand)){
-                            // 执行指令
-                            if(plugin.getConfig().getBoolean("general.run-command.return",true)){
-                                System.out.println("[Chat2QQ] "+ e.getGroupID() +"."+ e.getSenderID() + "运行指令: /"+ command);
 
-                                Commander Sender = new Commander();
-                                Bukkit.getScheduler().callSyncMethod(plugin, () -> Bukkit.dispatchCommand(Sender, command));
-
-                                // 等待指令运行
-                                Thread.sleep(plugin.getConfig().getInt("general.qq-groupx.sleep", 500));
-
-                                // 消息处理
-                                StringBuilder text = new StringBuilder();
-                                if(Sender.message.size() == 1){
-                                    text = Optional.ofNullable(Sender.message.get(0)).map(StringBuilder::new).orElse(null);
-                                }else if(Sender.message.size() > 1){
-                                    for(String m : Sender.message){
-                                        text.append(m).append("\n");
-                                    }
-                                }else{
-                                    text = new StringBuilder(plugin.getConfig().getString("general.run-command.message-no-out","message-no-out"));
-                                }
-                                System.out.println(text);
-                                // 处理彩色字符
-                                String finalText = String.valueOf(text).replaceAll("§[a-z0-9]", "");
-
-                                // 发送消息
-                                MiraiBot.getBot(plugin.getConfig().getLongList("bot.bot-accounts").get(0))
-                                        .getGroup(e.getGroupID())
-                                        .sendMessageMirai(String.valueOf(finalText));
-
-                            } else {
-                                Bukkit.dispatchCommand(Bukkit.getServer().getConsoleSender(), command);
-
-                                // 发送消息
-                                MiraiBot.getBot(plugin.getConfig().getLongList("bot.bot-accounts").get(0))
-                                        .getGroup(e.getGroupID())
-                                        .sendMessageMirai(plugin.getConfig().getString("general.run-command.message-no-out","message-no-out"));
-                            }
-
-                            return;
-                        }
+                    // 一个不好的方法, 有时间再改
+                    if(e.getSenderPermission() >= 0 && forList_startsWith(command, plugin.getConfig().getStringList("general.run-command.group.MEMBER"))){
+                        runCommand(command, e);
+                        return;
                     }
-
+                    else if(e.getSenderPermission() >= 1 && forList_startsWith(command, plugin.getConfig().getStringList("general.run-command.group.ADMINISTRATOR"))){
+                        runCommand(command, e);
+                        return;
+                    }
+                    else if(e.getSenderPermission() >= 2 && forList_startsWith(command, plugin.getConfig().getStringList("general.run-command.group.OWNER"))){
+                        runCommand(command, e);
+                        return;
+                    }
                 }
             }
         }
@@ -206,6 +171,56 @@ public class onGroupMessage implements Listener {
 
         if(plugin.getConfig().getLongList("bot.bot-accounts").contains(e.getBotID()) && plugin.getConfig().getLongList("bot.group-ids").contains(e.getGroupID()) && allowPrefix){
             Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&',formatText));
+        }
+    }
+
+    // 判断是否包含
+    public Boolean forList_startsWith(String var1, List<String> list) {
+        for(String list1 : list){
+            if(var1.startsWith(list1)) return true;
+        }
+        return false;
+    }
+
+    // 判断是否包含
+    public void runCommand(String command, MiraiGroupMessageEvent e) throws InterruptedException {
+        // 执行指令
+        if(plugin.getConfig().getBoolean("general.run-command.return",true)){
+            System.out.println("[Chat2QQ] "+ e.getGroupID() +"."+ e.getSenderID() + " 运行指令: /"+ command);
+
+            Commander Sender = new Commander();
+            Bukkit.getScheduler().callSyncMethod(plugin, () -> Bukkit.dispatchCommand(Sender, command));
+
+            // 等待指令运行
+            Thread.sleep(plugin.getConfig().getInt("general.run-command.sleep", 500));
+
+            // 消息处理
+            StringBuilder text = new StringBuilder();
+            if(Sender.message.size() == 1){
+                text = Optional.ofNullable(Sender.message.get(0)).map(StringBuilder::new).orElse(null);
+            }else if(Sender.message.size() > 1){
+                for(String m : Sender.message){
+                    text.append(m).append("\n");
+                }
+            }else{
+                text = new StringBuilder(plugin.getConfig().getString("general.run-command.message-no-out","message-no-out"));
+            }
+            System.out.println(text);
+            // 处理彩色字符
+            String finalText = String.valueOf(text).replaceAll("§[a-z0-9]", "");
+
+            // 发送消息
+            MiraiBot.getBot(plugin.getConfig().getLongList("bot.bot-accounts").get(0))
+                    .getGroup(e.getGroupID())
+                    .sendMessageMirai(String.valueOf(finalText));
+
+        } else {
+            Bukkit.dispatchCommand(Bukkit.getServer().getConsoleSender(), command);
+
+            // 发送消息
+            MiraiBot.getBot(plugin.getConfig().getLongList("bot.bot-accounts").get(0))
+                    .getGroup(e.getGroupID())
+                    .sendMessageMirai(plugin.getConfig().getString("general.run-command.message-no-out","message-no-out"));
         }
     }
 
