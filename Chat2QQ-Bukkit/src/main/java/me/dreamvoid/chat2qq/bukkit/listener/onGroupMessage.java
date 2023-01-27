@@ -20,7 +20,7 @@ public class onGroupMessage implements Listener {
     }
 
     @EventHandler
-    public void onGroupMessageReceive(MiraiGroupMessageEvent e) throws InterruptedException {
+    public void onGroupMessageReceive(MiraiGroupMessageEvent e) {
         if(plugin.getConfig().getStringList("blacklist.word").stream().anyMatch(s -> e.getMessage().contains(s)) || plugin.getConfig().getLongList("blacklist.qq").contains(e.getSenderID())) return;
 
         String name = e.getSenderNameCard();
