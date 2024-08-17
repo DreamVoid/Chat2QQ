@@ -14,9 +14,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4.1.7
     - name: Set up JDK 8
-      uses: actions/setup-java@v2
+      uses: actions/setup-java@v4.2.2
       with:
         java-version: '8'
         distribution: 'zulu'
@@ -25,21 +25,21 @@ jobs:
 
     # Chat2QQ-Bukkit.jar
     - name: Upload a Build Artifact - Chat2QQ Bukkit
-      uses: actions/upload-artifact@v2.3.1
+      uses: actions/upload-artifact@v4.3.6
       with:
         name: "Chat2QQ-Bukkit.jar"
         path: Chat2QQ-Bukkit/target/Chat2QQ-Bukkit.jar
 
     # Chat2QQ-Bungee.jar
     - name: Upload a Build Artifact - Chat2QQ Bungee
-      uses: actions/upload-artifact@v2.3.1
+      uses: actions/upload-artifact@v4.3.6
       with:
         name: "Chat2QQ-Bungee.jar"
         path: Chat2QQ-Bungee/target/Chat2QQ-Bungee.jar
 
     # Chat2QQ-Nukkit.jar
     - name: Upload a Build Artifact - Chat2QQ Nukkit
-      uses: actions/upload-artifact@v2.3.1
+      uses: actions/upload-artifact@v4.3.6
       with:
         name: "Chat2QQ-Nukkit.jar"
         path: Chat2QQ-Nukkit/target/Chat2QQ-Nukkit.jar
