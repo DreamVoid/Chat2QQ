@@ -11,13 +11,9 @@ import me.dreamvoid.chat2qq.nukkit.listener.onPlayerJoin;
 import me.dreamvoid.chat2qq.nukkit.listener.onPlayerMessage;
 import me.dreamvoid.chat2qq.nukkit.listener.onPlayerQuit;
 import me.dreamvoid.miraimc.api.MiraiBot;
-import me.dreamvoid.miraimc.httpapi.MiraiHttpAPI;
-import me.dreamvoid.miraimc.httpapi.exception.AbnormalStatusException;
 import me.dreamvoid.miraimc.nukkit.utils.MetricsLite;
 
-import java.io.IOException;
 import java.util.Arrays;
-import java.util.NoSuchElementException;
 
 public class NukkitPlugin extends PluginBase {
     @Override
@@ -75,19 +71,7 @@ public class NukkitPlugin extends PluginBase {
                 getServer().getScheduler().scheduleAsyncTask(this, new AsyncTask() {
                     @Override
                     public void onRun() {
-                        getConfig().getLongList("bot.bot-accounts").forEach(bot -> getConfig().getLongList("bot.group-ids").forEach(group -> {
-                            try {
-                                MiraiBot.getBot(bot).getGroup(group).sendMessageMirai(formatText);
-                            } catch (NoSuchElementException e) {
-                                if (MiraiHttpAPI.Bots.containsKey(bot)) {
-                                    try {
-                                        MiraiHttpAPI.INSTANCE.sendGroupMessage(MiraiHttpAPI.Bots.get(bot), group, formatText);
-                                    } catch (IOException | AbnormalStatusException ex) {
-                                        getLogger().warning("使用" + bot + "发送消息时出现异常，原因: " + ex);
-                                    }
-                                } else getLogger().warning("指定的机器人" + bot + "不存在，是否已经登录了机器人？");
-                            }
-                        }));
+                        getConfig().getLongList("bot.bot-accounts").forEach(bot -> getConfig().getLongList("bot.group-ids").forEach(group -> MiraiBot.getBot(bot).getGroup(group).sendMessageMirai(formatText)));
                     }
                 });
                 sender.sendMessage(TextFormat.colorize('&', "&a已发送QQ群聊天消息！"));

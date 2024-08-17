@@ -7,8 +7,6 @@ import me.dreamvoid.chat2qq.bukkit.listener.onPlayerMessage;
 import me.dreamvoid.chat2qq.bukkit.listener.onPlayerQuit;
 import me.dreamvoid.chat2qq.bukkit.utils.Metrics;
 import me.dreamvoid.miraimc.api.MiraiBot;
-import me.dreamvoid.miraimc.httpapi.MiraiHttpAPI;
-import me.dreamvoid.miraimc.httpapi.exception.AbnormalStatusException;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -17,12 +15,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.IOException;
 import java.util.Arrays;
-import java.util.NoSuchElementException;
 
 public class BukkitPlugin extends JavaPlugin implements Listener, CommandExecutor {
 
@@ -93,24 +88,7 @@ public class BukkitPlugin extends JavaPlugin implements Listener, CommandExecuto
                     formatText = PlaceholderAPI.setPlaceholders((Player) sender,formatText);
                 }
                 String finalFormatText = formatText;
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        getConfig().getLongList("bot.bot-accounts").forEach(bot -> getConfig().getLongList("bot.group-ids").forEach(group -> {
-                            try {
-                                MiraiBot.getBot(bot).getGroup(group).sendMessageMirai(finalFormatText);
-                            } catch (NoSuchElementException e) {
-                                if (MiraiHttpAPI.Bots.containsKey(bot)) {
-                                    try {
-                                        MiraiHttpAPI.INSTANCE.sendGroupMessage(MiraiHttpAPI.Bots.get(bot), group, finalFormatText);
-                                    } catch (IOException | AbnormalStatusException ex) {
-                                        getLogger().warning("使用" + bot + "发送消息时出现异常，原因: " + ex);
-                                    }
-                                } else getLogger().warning("指定的机器人" + bot + "不存在，是否已经登录了机器人？");
-                            }
-                        }));
-                    }
-                }.runTaskAsynchronously(this);
+                getServer().getScheduler().runTaskAsynchronously(this, () -> getConfig().getLongList("bot.bot-accounts").forEach(bot -> getConfig().getLongList("bot.group-ids").forEach(group -> MiraiBot.getBot(bot).getGroup(group).sendMessageMirai(finalFormatText))));
                 sender.sendMessage(ChatColor.translateAlternateColorCodes('&',"&a已发送QQ群聊天消息！"));
                 if(getConfig().getBoolean("general.command-also-broadcast-to-chat") && sender instanceof Player){
                     Player player = (Player) sender;

@@ -57,7 +57,7 @@ public class onGroupMessage implements Listener {
         }
 
         String formatText;
-        if(plugin.getConfig().getBoolean("general.use-miraimc-bind",true) && MiraiMC.getBind(e.getSenderID()) != null){
+        if(plugin.getConfig().getBoolean("general.use-miraimc-bind",true) && MiraiMC.Bind.getBind(e.getSenderID()) != null){
             formatText = plugin.getConfig().getString("general.bind-chat-format")
                     .replace("%groupname%",e.getGroupName())
                     .replace("%groupid%",String.valueOf(e.getGroupID()))
@@ -65,7 +65,7 @@ public class onGroupMessage implements Listener {
                     .replace("%regex_nick%", $regex_nick)
                     .replace("%qq%",String.valueOf(e.getSenderID()))
                     .replace("%message%", message)
-                    .replace("%player%",plugin.getProxy().getPlayer(MiraiMC.getBind(e.getSenderID())).getDisplayName());
+                    .replace("%player%",plugin.getProxy().getPlayer(MiraiMC.Bind.getBind(e.getSenderID())).getDisplayName());
         } else {
             formatText = plugin.getConfig().getString("general.in-game-chat-format")
                     .replace("%groupname%",e.getGroupName())

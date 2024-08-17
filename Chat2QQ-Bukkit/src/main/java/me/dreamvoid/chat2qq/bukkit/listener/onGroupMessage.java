@@ -113,7 +113,7 @@ public class onGroupMessage implements Listener {
         }
 
         String formatText;
-        if(plugin.getConfig().getBoolean("general.use-miraimc-bind",true) && MiraiMC.getBind(e.getSenderID()) != null){
+        if(plugin.getConfig().getBoolean("general.use-miraimc-bind",true) && MiraiMC.Bind.getBind(e.getSenderID()) != null){
             formatText = plugin.getConfig().getString("general.bind-chat-format")
                     .replace("%groupname%",e.getGroupName())
                     .replace("%groupid%",String.valueOf(e.getGroupID()))
@@ -122,7 +122,7 @@ public class onGroupMessage implements Listener {
                     .replace("%qq%",String.valueOf(e.getSenderID()))
                     .replace("%message%", message);
             if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null){
-                formatText = PlaceholderAPI.setPlaceholders(Bukkit.getOfflinePlayer(MiraiMC.getBind(e.getSenderID())), formatText);
+                formatText = PlaceholderAPI.setPlaceholders(Bukkit.getOfflinePlayer(MiraiMC.Bind.getBind(e.getSenderID())), formatText);
             }
         } else {
             formatText = plugin.getConfig().getString("general.in-game-chat-format")

@@ -2,14 +2,11 @@ package me.dreamvoid.chat2qq.bungee.listener;
 
 import me.dreamvoid.chat2qq.bungee.BungeePlugin;
 import me.dreamvoid.miraimc.api.MiraiBot;
-import me.dreamvoid.miraimc.httpapi.MiraiHttpAPI;
-import me.dreamvoid.miraimc.httpapi.exception.AbnormalStatusException;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.PostLoginEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
 import java.util.concurrent.TimeUnit;
@@ -30,13 +27,7 @@ public class onPlayerJoin implements Listener {
                     try {
                         MiraiBot.getBot(bot).getGroup(group).sendMessageMirai(message);
                     } catch (NoSuchElementException e1) {
-                        if (MiraiHttpAPI.Bots.containsKey(bot)) {
-                            try {
-                                MiraiHttpAPI.INSTANCE.sendGroupMessage(MiraiHttpAPI.Bots.get(bot), group, message);
-                            } catch (IOException | AbnormalStatusException ex) {
-                                plugin.getLogger().warning("使用" + bot + "发送消息时出现异常，原因: " + ex);
-                            }
-                        } else plugin.getLogger().warning("指定的机器人" + bot + "不存在，是否已经登录了机器人？");
+                        plugin.getLogger().warning("指定的机器人" + bot + "不存在，是否已经登录了机器人？");
                     } finally {
                         int interval = plugin.getConfig().getInt("bot.player-join-message-interval");
                         if(interval > 0) {

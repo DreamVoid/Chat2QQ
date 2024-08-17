@@ -2,16 +2,11 @@ package me.dreamvoid.chat2qq.bungee.commands;
 
 import me.dreamvoid.chat2qq.bungee.BungeePlugin;
 import me.dreamvoid.miraimc.api.MiraiBot;
-import me.dreamvoid.miraimc.httpapi.MiraiHttpAPI;
-import me.dreamvoid.miraimc.httpapi.exception.AbnormalStatusException;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Command;
-
-import java.io.IOException;
-import java.util.NoSuchElementException;
 
 public class qchat extends Command {
     private final BungeePlugin plugin;
@@ -71,19 +66,7 @@ public class qchat extends Command {
         }
 
         if(allowServer && !inBlackList) {
-            plugin.getProxy().getScheduler().runAsync(plugin, () -> plugin.getConfig().getLongList("bot.bot-accounts").forEach(bot -> plugin.getConfig().getLongList("bot.group-ids").forEach(group -> {
-                try {
-                    MiraiBot.getBot(bot).getGroup(group).sendMessageMirai(formatText);
-                } catch (NoSuchElementException e) {
-                    if (MiraiHttpAPI.Bots.containsKey(bot)) {
-                        try {
-                            MiraiHttpAPI.INSTANCE.sendGroupMessage(MiraiHttpAPI.Bots.get(bot), group, formatText);
-                        } catch (IOException | AbnormalStatusException ex) {
-                            plugin.getLogger().warning("使用" + bot + "发送消息时出现异常，原因: " + ex);
-                        }
-                    } else plugin.getLogger().warning("指定的机器人" + bot + "不存在，是否已经登录了机器人？");
-                }
-            })));
+            plugin.getProxy().getScheduler().runAsync(plugin, () -> plugin.getConfig().getLongList("bot.bot-accounts").forEach(bot -> plugin.getConfig().getLongList("bot.group-ids").forEach(group -> MiraiBot.getBot(bot).getGroup(group).sendMessageMirai(formatText))));
             sender.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&',"&a已发送QQ群聊天消息！")));
             if(plugin.getConfig().getBoolean("general.command-also-broadcast-to-chat") && sender instanceof ProxiedPlayer){
                 ProxiedPlayer player = (ProxiedPlayer) sender;

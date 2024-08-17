@@ -25,7 +25,7 @@
             <groupId>io.github.dreamvoid</groupId>
             <artifactId>MiraiMC-Integration</artifactId>
             <!--请确保版本为Github上的最新版本-->
-            <version>1.7-rc2</version>
+            <version>1.9-pre2</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

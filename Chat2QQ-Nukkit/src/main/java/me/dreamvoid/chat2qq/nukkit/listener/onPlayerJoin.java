@@ -7,10 +7,7 @@ import cn.nukkit.event.player.PlayerJoinEvent;
 import cn.nukkit.scheduler.AsyncTask;
 import me.dreamvoid.chat2qq.nukkit.NukkitPlugin;
 import me.dreamvoid.miraimc.api.MiraiBot;
-import me.dreamvoid.miraimc.httpapi.MiraiHttpAPI;
-import me.dreamvoid.miraimc.httpapi.exception.AbnormalStatusException;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
 
@@ -32,13 +29,7 @@ public class onPlayerJoin implements Listener {
                         try {
                             MiraiBot.getBot(bot).getGroup(group).sendMessageMirai(message);
                         } catch (NoSuchElementException e) {
-                            if (MiraiHttpAPI.Bots.containsKey(bot)) {
-                                try {
-                                    MiraiHttpAPI.INSTANCE.sendGroupMessage(MiraiHttpAPI.Bots.get(bot), group, message);
-                                } catch (IOException | AbnormalStatusException ex) {
-                                    plugin.getLogger().warning("使用" + bot + "发送消息时出现异常，原因: " + ex);
-                                }
-                            } else plugin.getLogger().warning("指定的机器人" + bot + "不存在，是否已经登录了机器人？");
+                            plugin.getLogger().warning("指定的机器人" + bot + "不存在，是否已经登录了机器人？");
                         } finally {
                             int interval = plugin.getConfig().getInt("bot.player-join-message-interval");
                             if(interval > 0) {
