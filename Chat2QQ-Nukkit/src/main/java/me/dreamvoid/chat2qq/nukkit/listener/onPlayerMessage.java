@@ -53,7 +53,6 @@ public class onPlayerMessage implements Listener {
                                 plugin.getLogger().warning("指定的机器人" + bot + "不存在，是否已经登录了机器人？");
                             }
                         }));
-
                     }
                 });
             }

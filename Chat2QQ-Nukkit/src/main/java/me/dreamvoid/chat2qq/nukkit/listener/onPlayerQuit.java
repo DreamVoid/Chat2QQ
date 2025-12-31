@@ -29,12 +29,7 @@ public class onPlayerQuit implements Listener {
                         int interval = plugin.getConfig().getInt("bot.player-quit-message-interval");
                         if(interval > 0) {
                             cache.add(e.getPlayer());
-                            plugin.getServer().getScheduler().scheduleDelayedTask(plugin, new AsyncTask() {
-                                @Override
-                                public void onRun() {
-                                    cache.remove(e.getPlayer());
-                                }
-                            },interval * 1000, true);
+                            plugin.getServer().getScheduler().scheduleDelayedTask(plugin, () -> cache.remove(e.getPlayer()),interval * 1000, true);
                         }
                     }));
                 }

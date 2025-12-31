@@ -23,8 +23,7 @@ public class qchat extends Command {
         boolean allowConsole = plugin.getConfig().getBoolean("general.allow-console-chat", false);
         boolean inBlackList = false;
 
-        if(sender instanceof ProxiedPlayer){
-            ProxiedPlayer player = (ProxiedPlayer) sender;
+        if(sender instanceof ProxiedPlayer player){
             playerName = player.getDisplayName();
             // 判断玩家所处世界
             for(String server : plugin.getConfig().getStringList("general.available-servers")){
@@ -68,8 +67,7 @@ public class qchat extends Command {
         if(allowServer && !inBlackList) {
             plugin.getProxy().getScheduler().runAsync(plugin, () -> plugin.getConfig().getLongList("bot.bot-accounts").forEach(bot -> plugin.getConfig().getLongList("bot.group-ids").forEach(group -> MiraiBot.getBot(bot).getGroup(group).sendMessageMirai(formatText))));
             sender.sendMessage(TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&',"&a已发送QQ群聊天消息！")));
-            if(plugin.getConfig().getBoolean("general.command-also-broadcast-to-chat") && sender instanceof ProxiedPlayer){
-                ProxiedPlayer player = (ProxiedPlayer) sender;
+            if(plugin.getConfig().getBoolean("general.command-also-broadcast-to-chat") && sender instanceof ProxiedPlayer player){
                 player.chat(message.toString());
             }
         }

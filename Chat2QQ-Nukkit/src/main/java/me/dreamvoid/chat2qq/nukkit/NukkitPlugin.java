@@ -13,6 +13,7 @@ import me.dreamvoid.chat2qq.nukkit.listener.onPlayerQuit;
 import me.dreamvoid.miraimc.api.MiraiBot;
 import me.dreamvoid.miraimc.nukkit.utils.MetricsLite;
 
+import java.text.MessageFormat;
 import java.util.Arrays;
 
 public class NukkitPlugin extends PluginBase {
@@ -74,7 +75,7 @@ public class NukkitPlugin extends PluginBase {
                         getConfig().getLongList("bot.bot-accounts").forEach(bot -> getConfig().getLongList("bot.group-ids").forEach(group -> MiraiBot.getBot(bot).getGroup(group).sendMessageMirai(formatText)));
                     }
                 });
-                sender.sendMessage(TextFormat.colorize('&', "&a已发送QQ群聊天消息！"));
+                sender.sendMessage(TextFormat.GREEN + "已发送QQ群聊天消息！");
                 if (getConfig().getBoolean("general.command-also-broadcast-to-chat") && sender instanceof Player) {
                     ((Player) sender).chat(message.toString());
                 }
@@ -84,10 +85,10 @@ public class NukkitPlugin extends PluginBase {
             if(args.length>=1 && args[0].equalsIgnoreCase("reload")){
                 if(sender.hasPermission("miraimc.command.chat2qq")){
                     reloadConfig();
-                    sender.sendMessage(TextFormat.colorize('&',"&a配置文件已经重新载入！"));
-                } else sender.sendMessage(TextFormat.colorize('&',"&c你没有足够的权限使用此命令！"));
+                    sender.sendMessage(TextFormat.GREEN + "配置文件已经重新载入！");
+                } else sender.sendMessage(TextFormat.RED + "你没有足够的权限使用此命令！");
             } else {
-                sender.sendMessage("This server is running "+getDescription().getName()+" version "+getDescription().getVersion()+" by "+ getDescription().getAuthors().toString().replace("[","").replace("]","")+" (MiraiMC version "+ getServer().getPluginManager().getPlugin("MiraiMC").getDescription().getVersion()+")");
+                sender.sendMessage(MessageFormat.format("This server is running {0} version {1} by {2} (MiraiMC version {3})", getDescription().getName(), getDescription().getVersion(), getDescription().getAuthors().toString().replace("[", "").replace("]", ""), getServer().getPluginManager().getPlugin("MiraiMC").getDescription().getVersion()));
             }
         }
         return true;
